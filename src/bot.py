@@ -1,11 +1,12 @@
 import discord
 from discord_control.commands import *
+from discord import app_commands
 import  os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-user_commands = {
+USER_COMMANDS = {
     "!join": join,
     "!leave": leave,
     "!play": play,
@@ -27,8 +28,17 @@ user_commands = {
     "!autoplay": autoplay
 }
 
-
 class MyClient(discord.Client):
+    def __init__(self):
+        super().__init__(
+            intents=discord.Intents.default()
+        )
+
+        self.tree = app_commands.CommandTree(self)
+
+    async def setup_hook(self):
+        await self.tree.sync()
+
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
 
@@ -40,19 +50,23 @@ class MyClient(discord.Client):
             return
         
         command = message.content.split()[0]
-        if command in user_commands:
-            await user_commands[command](message)
+        if command in USER_COMMANDS:
+            await USER_COMMANDS[command](message)
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = MyClient(intents=intents)
+client = MyClient()
+
+@app_commands.command(name="join", description=f"Makes {client.user} join the current voice channel.")
+async def join_command(interaction: discord.Interaction):
+    await join(interaction)
+
 client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 """
 !lyrics
 !albuminfo
 !artistinfo
-!autoplay
 !help
 """

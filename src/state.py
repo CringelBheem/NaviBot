@@ -7,12 +7,11 @@ class GuildState:
             "title": "",
             "artist": "",
             "track_id": ""
-
         }
 
 guilds = {}
 
-def get_guild(guild_id):
+def get_guild(guild_id) -> dict:
     if guild_id not in guilds:
         guilds[guild_id] = GuildState()
     return guilds[guild_id]
