@@ -3,14 +3,16 @@ from discord_control.commands import *
 from discord import app_commands
 import  os
 from dotenv import load_dotenv
+from state import CommandContext, get_guild
+from discord_control.responses import *
 
 load_dotenv()
 
 USER_COMMANDS = {
     "!join": join,
     "!leave": leave,
-    "!play": play,
-    "!search": search,
+    #"!play": play,
+    #"!search": search,
     "!skip": skip,
     "!stop": stop,
     "!pause": pause,
@@ -32,8 +34,9 @@ class MyClient(discord.Client):
     def __init__(self):
         super().__init__(
             intents=discord.Intents.default()
+            intents.message_content = True
         )
-
+        
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
@@ -43,6 +46,9 @@ class MyClient(discord.Client):
         print(f'Logged on as {self.user}!')
 
     async def on_message(self, message):
+        success = lambda: message.add_reaction("✅")
+        failure = lambda : message.add_reaction("❌")
+        ctx = CommandContext(guild_state= get_guild(message.guild.id), voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice)
         if message.author == self.user:
             return
         
@@ -50,18 +56,25 @@ class MyClient(discord.Client):
             return
         
         command = message.content.split()[0]
-        if command in USER_COMMANDS:
-            await USER_COMMANDS[command](message)
-
-intents = discord.Intents.default()
-intents.message_content = True
+        if command == "!play":
+            try:
+                query = message.content.split(" ", 1)[1]
+            except(IndexError, ValueError):
+                await error_response("No songs found.", get_guild(message.guild.id), message.channel.send, failure)
+                return
+            await play(ctx, query)
+        elif command == "!search":
+            try:
+                query = message.content.split(" ", 1)[1]
+            except(IndexError, ValueError):
+                await error_response("No results found.", get_guild(message.guild.id), message.channel.send, failure)
+                return
+            query = message.content.split(" ", 1)[1]
+            await search(ctx, query)
+        elif command in USER_COMMANDS:
+            await USER_COMMANDS[command](ctx)
 
 client = MyClient()
-
-@app_commands.command(name="join", description=f"Makes {client.user} join the current voice channel.")
-async def join_command(interaction: discord.Interaction):
-    await join(interaction)
-
 client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 """

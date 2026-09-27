@@ -1,66 +1,56 @@
-from state import get_guild
+from state import get_guild, CommandContext
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
 import random
 
-async def join(message):
-    guild = get_guild(message.guild.id)
-    voice = message.guild.voice_client
-    if not voice:
-        joined = await join_check(message, guild)
+async def join(ctx: CommandContext):
+    if not ctx.voice:
+        voice = await join_check(ctx)
 
-        if not joined:
+        if not voice:
             return
-    await silent_response(guild, message)
+        
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def leave(message):
-    guild = get_guild(message.guild.id)
+async def leave(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.now_playing:
         guild.now_playing["title"] = ""
         guild.now_playing["artist"]= ""
         guild.now_playing["track_id"]= ""
     if guild.queue:
         guild.queue.clear()
-    if message.guild.voice_client:
-        await message.guild.voice_client.disconnect()
+    if ctx.voice:
+        await ctx.voice.disconnect()
         if guild.silent == 0:
-            await message.channel.send("Left the voice channel.")
-    await silent_response(guild, message)
+            await ctx.respond("Left the voice channel.")
+    await silent_response(ctx.guild_state, ctx.success)
     
-async def play(message):
-    guild = get_guild(message.guild.id)
-    voice = message.guild.voice_client
-    try:
-        query = message.content.split(" ", 1)[1]
-    except(IndexError, ValueError):
-        await error_response("No songs found.", guild, message)
-        return
+async def play(ctx: CommandContext, query: str):
+    guild = ctx.guild_state
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
 
     if not voice:
-        joined = await join_check(message, guild)
-        if not joined:
-            return
-        voice = message.guild.voice_client
+        return
     
     results = search_navidrome(query, "search2")
     songs = results.get("song", [])
 
     if not songs:
-        await error_response("No songs found.", guild, message)
+        await error_response("No songs found.", guild, ctx.respond, ctx.failure)
         return
 
     track = songs[0]
-    await add_track(voice, message, guild, track)
-    await silent_response(guild, message)
+    await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)
         
-async def search(message):
-    guild = get_guild(message.guild.id)
-    try:
-        query = message.content.split(" ", 1)[1]
-    except(IndexError, ValueError):
-        await error_response("No results found.", guild, message)
-        return
+async def search(ctx: CommandContext, query):
+    guild = ctx.guild_state
+
     results = search_navidrome(query, "search2")
     reply = ""
     artists = [a["name"] for a in results.get("artist", [])]
@@ -79,19 +69,19 @@ async def search(message):
         for song in songs[:10]:
             reply += f" - {song}\n"
     if not reply:
-        await error_response("No results found.", guild, message)
+        await error_response("No results found.", guild, ctx.respond, ctx.failure)
     else:
-        await message.channel.send(reply)
+        await ctx.respond(reply)
 
-async def skip(message):
-    guild = get_guild(message.guild.id)
+async def skip(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.silent == 0:
-        await message.channel.send(f"Skipping track.")
-    voice = message.guild.voice_client
+        await ctx.respond(f"Skipping track.")
+    voice = ctx.voice
     if voice:
         voice.stop()
-    await silent_response(guild, message)
-
+    await silent_response(ctx.guild_state, ctx.success)
+    
 async def stop(message):
     guild = get_guild(message.guild.id)
     if guild.silent == 0:
@@ -280,5 +270,3 @@ async def autoplay(message):
         if guild.silent == 0:
             await message.channel.send(f"Autoplay disabled.")
     await silent_response(guild, message)
-
-    

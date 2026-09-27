@@ -1,24 +1,24 @@
 
-async def silent_response(guild, message):
+async def silent_response(guild, success):
     if guild.silent == 1:
-        await message.add_reaction("✅")
-        await message.delete(delay=2)
+        await success()
+        #await message.delete(delay=2)
 
-async def error_response(text, guild, message):
+async def error_response(text, guild, respond, failure):
     if guild.silent == 0:
-        await message.channel.send(text)
+        await respond(text)
     elif guild.silent == 1:
-        await message.add_reaction("❌")
-        await message.delete(delay=2)
+        await failure()
+        #await message.delete(delay=2)
 
-async def join_check(message, guild):
-    if message.author.voice:
-        channel = message.author.voice.channel
+async def join_check(ctx):
+    if ctx.user_voice:
+        channel = ctx.user_voice.channel
         await channel.connect()
-        if guild.silent == 0:
-            await message.channel.send("Joined the voice channel.")
-        return True
+        if ctx.guild_state.silent == 0:
+            await ctx.respond("Joined the voice channel.")
+        voice = ctx.user_voice.guild.voice_client
+        return voice
     else:
-        await error_response("You must be in a voice channel.", guild, message)
-        return False
-
+        await error_response("You must be in a voice channel.", ctx.guild_state, ctx.respond, ctx.failure)
+        return
