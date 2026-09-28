@@ -17,9 +17,8 @@ def get_guild(guild_id) -> dict:
     return guilds[guild_id]
 
 class CommandContext:
-    def __init__(self, guild_state, guild, voice, respond, success, failure, user_voice):
+    def __init__(self, guild_state, voice, respond, success, failure, user_voice):
         self.guild_state = guild_state
-        self.guild = guild
         self.voice = voice
         self.respond = respond
         self.success = success
