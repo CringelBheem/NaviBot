@@ -27,7 +27,7 @@ def use_queue(voice, guild):
             guild.now_playing["track_id"]= ""
             return
 
-async def add_track(voice, message, guild, track):
+async def add_track(voice, respond, guild, track):
     track_id = track["id"]
     if not voice.is_playing() and not voice.is_paused():
         url = build_stream_url(track_id)       
@@ -37,8 +37,8 @@ async def add_track(voice, message, guild, track):
         guild.now_playing["artist"] = track['artist']
         guild.now_playing["track_id"] = track_id
         if guild.silent == 0:
-            await message.channel.send(f"Playing: {track['title']} by {track['artist']}")
+            await respond(f"Playing: {track['title']} by {track['artist']}")
     else:
         guild.queue.insert(0, {"id": track_id, "title": track['title'], "artist": track['artist']})
         if guild.silent == 0:
-            await message.channel.send(f"Added: {track['title']} by {track['artist']} to queue. Position: {len(guild.queue)}")
+            await respond(f"Added: {track['title']} by {track['artist']} to queue. Position: {len(guild.queue)}")

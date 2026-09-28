@@ -15,10 +15,9 @@ async def join(ctx: CommandContext):
 
 async def leave(ctx: CommandContext):
     guild = ctx.guild_state
-    if guild.now_playing:
-        guild.now_playing["title"] = ""
-        guild.now_playing["artist"]= ""
-        guild.now_playing["track_id"]= ""
+    guild.now_playing["title"] = ""
+    guild.now_playing["artist"]= ""
+    guild.now_playing["track_id"]= ""
     if guild.queue:
         guild.queue.clear()
     if ctx.voice:
@@ -82,107 +81,103 @@ async def skip(ctx: CommandContext):
         voice.stop()
     await silent_response(ctx.guild_state, ctx.success)
     
-async def stop(message):
-    guild = get_guild(message.guild.id)
+async def stop(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.silent == 0:
-        await message.channel.send(f"Stopped all songs.")
+        await ctx.respond(f"Stopped all songs.")
     if guild.queue:
         guild.queue.clear()
     guild.autoplay = 0
-    voice = message.guild.voice_client
+    voice = ctx.voice
     if voice:
         voice.stop()
-    await silent_response(guild, message)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def pause(message):
-    guild = get_guild(message.guild.id)
+async def pause(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.silent == 0:
-        await message.channel.send(f"Paused.")
-    voice = message.guild.voice_client
+        await ctx.respond(f"Paused.")
+    voice = ctx.voice
     if voice:
         voice.pause()
-    await silent_response(guild, message)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def resume(message):
-    guild = get_guild(message.guild.id)
+async def resume(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.silent == 0:
-        await message.channel.send(f"Resuming.")
-    voice = message.guild.voice_client
+        await ctx.respond(f"Resuming.")
+    voice = ctx.voice
     if voice:
         voice.resume()
-    await silent_response(guild, message)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def playing(message):
-    guild = get_guild(message.guild.id)
+async def playing(ctx: CommandContext):
+    guild = ctx.guild_state
     if (not guild.now_playing or guild.now_playing["title"] == ""):
-        await message.channel.send("Nothing is currently playing.")
+        await ctx.respond("Nothing is currently playing.")
         return
-    await message.channel.send(f"**Currently playing**: {guild.now_playing['title']} by {guild.now_playing['artist']}.")
+    await ctx.respond(f"**Currently playing**: {guild.now_playing['title']} by {guild.now_playing['artist']}.")
 
-async def queue(message):
-    guild = get_guild(message.guild.id)
+async def queue(ctx: CommandContext):
+    guild = ctx.guild_state
     if (not guild.now_playing or guild.now_playing["title"] == ""):
-        await message.channel.send("Nothing is currently playing.")
+        await ctx.respond("Nothing is currently playing.")
         return
     reply = f"**Currently playing: ** {guild.now_playing['title']} by {guild.now_playing['artist']}.\n"
     for i, track in enumerate(reversed(guild.queue)):
         reply += f"**{i+1}: ** {track['title']} by {track['artist']}.\n"
-    await message.channel.send(reply)
+    await ctx.respond(reply)
     
-async def parrot(message):
-    await message.channel.send(message.content[8:])
-    await message.delete()
+async def parrot(ctx: CommandContext, parrot_text):
+    await ctx.respond(parrot_text)
+    #await message.delete()
 
-async def play_album(message):
-    guild = get_guild(message.guild.id)
-    voice = message.guild.voice_client
-    try:
-        query = message.content.split(" ", 1)[1]
-    except(IndexError, ValueError):
-        await error_response("No album found.", guild, message)
-        return
-    
+async def play_album(ctx: CommandContext, query):
+    guild = ctx.guild_state
+
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
+
     if not voice:
-        joined = await join_check(message, guild)
-        if not joined:
-            return
-        voice = message.guild.voice_client
+        return
     
     songs = search_album(query)
 
     if not songs:
-        await error_response("No songs found.", guild, message)
+        await error_response("No albums found.", guild, ctx.respond, ctx.failure)
         return
     
-    for song in songs:
-        await add_track(voice, message, guild, song)
-    await silent_response(guild, message)
+    for track in songs:
+        await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def silent(message):
-    guild = get_guild(message.guild.id)
+async def silent(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.silent == 1:
         guild.silent = 0
-        await message.add_reaction("✅")
-        await message.channel.send(f"Silent mode off.")
+        await ctx.success()
+        await ctx.respond(f"Silent mode off.")
     else:
         guild.silent = 1
-        await message.add_reaction("✅")
-        await message.delete(delay=2)
+        await ctx.success()
 
-async def play_random_album(message):
-    guild = get_guild(message.guild.id)
-    voice = message.guild.voice_client
+async def play_random_album(ctx: CommandContext):
+    guild = ctx.guild_state
+
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
 
     if not voice:
-        joined = await join_check(message, guild)
-        if not joined:
-            return
-        voice = message.guild.voice_client
+        return
     
     randsong = search_random(1)
 
     if not randsong:
-        await error_response("No albums found.", guild, message)
+        await error_response("No albums found.", guild, ctx.respond, ctx.failure)
         return
     
     album = randsong[0]["album"]
@@ -190,83 +185,75 @@ async def play_random_album(message):
     songs = search_album(album)
 
     if not songs:
-        await error_response("No songs found.", guild, message)
+        await error_response("No songs found.", guild, ctx.respond, ctx.failure)
         return
     
-    for song in songs:
-        await add_track(voice, message, guild, song)
-    await silent_response(guild, message)
+    for track in songs:
+        await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def play_random(message):
-    guild = get_guild(message.guild.id)
-    voice = message.guild.voice_client
-    try:
-        size = int(message.content.split(" ", 1)[1])
-    except (IndexError, ValueError):
-        size = None
+async def play_random(ctx: CommandContext, size):
+    guild = ctx.guild_state
+
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
 
     if not voice:
-        joined = await join_check(message, guild)
-        if not joined:
-            return
-        voice = message.guild.voice_client
+        return
     
     songs = search_random(size)
 
     if not songs:
-        await error_response("No songs found.", guild, message)
+        await error_response("No songs found.", guild, ctx.respond, ctx.failure)
         return
     
-    for song in songs:
-        await add_track(voice, message, guild, song)
-    await silent_response(guild, message)
+    for track in songs:
+        await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def remove_item(message):
-    guild = get_guild(message.guild.id)
-    try:
-        queue_ind = int(message.content.split(" ", 1)[1])
-    except (IndexError, ValueError):
-        await error_response("No valid index.", guild, message)
-        return
-    
+async def remove_item(ctx: CommandContext, queue_ind):
+    guild = ctx.guild_state
+
     length = len(guild.queue)
     if 0 < queue_ind >= (length + 1):
-        await error_response("No valid index.", guild, message)
+        await error_response("No valid index.", guild, ctx.respond, ctx.failure)
         return
     try:
         removed_item = guild.queue.pop(length - queue_ind)
         if guild.silent == 0:
-            await message.channel.send(f"Removed: {removed_item['title']} by {removed_item['artist']} from queue.")
+            await ctx.respond(f"Removed: {removed_item['title']} by {removed_item['artist']} from queue.")
         else:
-            await silent_response(guild, message)
+            await silent_response(ctx.guild_state, ctx.success)
     except  (IndexError, ValueError):
-        await error_response("No valid index.", guild, message)
+        await error_response("No valid index.", guild, ctx.respond, ctx.failure)
         return
 
-async def clear_queue(message):
-    guild = get_guild(message.guild.id)
+async def clear_queue(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.queue:
         guild.queue.clear()
     if guild.silent == 0:
-            await message.channel.send(f"Cleared queue.")
-    await silent_response(guild, message)
+            await ctx.respond(f"Cleared queue.")
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def shuffle_queue(message):
-    guild = get_guild(message.guild.id)
+async def shuffle_queue(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.queue:
         random.shuffle(guild.queue)
     if guild.silent == 0:
-            await message.channel.send(f"Shuffled queue.")
-    await silent_response(guild, message)
+            await ctx.respond(f"Shuffled queue.")
+    await silent_response(ctx.guild_state, ctx.success)
 
-async def autoplay(message):
-    guild = get_guild(message.guild.id)
+async def autoplay(ctx: CommandContext):
+    guild = ctx.guild_state
     if guild.autoplay == 0:
         guild.autoplay = 1
         if guild.silent == 0:
-            await message.channel.send(f"Autoplay enabled.")
+            await ctx.respond(f"Autoplay enabled.")
     else:
         guild.autoplay = 0
         if guild.silent == 0:
-            await message.channel.send(f"Autoplay disabled.")
-    await silent_response(guild, message)
+            await ctx.respond(f"Autoplay disabled.")
+    await silent_response(ctx.guild_state, ctx.success)
