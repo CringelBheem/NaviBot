@@ -78,7 +78,7 @@ class MyClient(discord.Client):
                 await error_response("No album found.", get_guild(message.guild.id), message.channel.send, failure)
                 return
             await play_album(ctx, query)
-        elif command == "!playrandom"(ctx, size):
+        elif command == "!playrandom":
             try:
                 size = int(message.content.split(" ", 1)[1])
             except (IndexError, ValueError):

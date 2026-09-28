@@ -6,8 +6,17 @@ from state import CommandContext, get_guild
 async def do_nothing():
     pass
 
+
 def create_context(interaction: discord.Interaction):
-    return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=interaction.response.send_message, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
+
+    async def respond(text):
+        if not interaction.response.is_done():
+            await interaction.response.send_message(text)
+        else:
+            await interaction.followup.send(text)
+        
+
+    return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
 
 
 def register(tree):
