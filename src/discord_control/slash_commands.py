@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord_control.commands import *
 from state import CommandContext, get_guild
+from navidrome.api import search_navidrome
 
 async def do_nothing():
     pass
@@ -18,6 +19,15 @@ def create_context(interaction: discord.Interaction):
 
     return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
 
+async def song_autocomplete(interaction: discord.Interaction, search: str):
+    results = search_navidrome(search, "search2")
+    songs = results.get("song", [])
+    return [
+        app_commands.Choice(name=f"{song['title'] - song['artist']}", value=song['title']) for song in songs[:25]
+    ]
+
+    
+
 
 def register(tree):
     @tree.command(name="join", description=f"Makes the bot join the current voice channel.")
@@ -27,6 +37,7 @@ def register(tree):
     async def leave_command(interaction: discord.Interaction):
         await leave(create_context(interaction))
     @tree.command(name="play", description=f"Adds a track for the bot to play.")
+    @app_commands.autocomplete(query=song_autocomplete)
     async def play_command(interaction: discord.Interaction, query: str):
         await play(create_context(interaction), query)
     @tree.command(name="search", description=f"Searches navidrome for artists, albums, and songs.")
