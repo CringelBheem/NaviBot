@@ -23,7 +23,7 @@ async def song_autocomplete(interaction: discord.Interaction, search: str):
     results = search_navidrome(search, "search2")
     songs = results.get("song", [])
     return [
-        app_commands.Choice(name=f"{song['title'] - song['artist']}", value=song['title']) for song in songs[:25]
+        app_commands.Choice(name=f"{song['title']} - {song['artist']}", value=song['title']) for song in songs[:25]
     ]
 
     
