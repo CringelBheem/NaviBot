@@ -26,6 +26,12 @@ async def song_autocomplete(interaction: discord.Interaction, search: str):
         app_commands.Choice(name=f"{song['title']} - {song['artist']}"[:100], value=song['title']) for song in songs[:25]
     ]
 
+async def album_autocomplete(interaction: discord.Interaction, search: str):
+    results = search_navidrome(search, "search2")
+    albums = results.get("album", [])
+    return [
+        app_commands.Choice(name=f"{album['title']} - {album['artist']}"[:100], value=album['title']) for album in albums[:25]
+    ]
     
 
 
@@ -41,6 +47,7 @@ def register(tree):
     async def play_command(interaction: discord.Interaction, query: str):
         await play(create_context(interaction), query)
     @tree.command(name="search", description=f"Searches navidrome for artists, albums, and songs.")
+    @app_commands.autocomplete(query=song_autocomplete)
     async def search_command(interaction: discord.Interaction, query: str):
         await search(create_context(interaction), query)
     @tree.command(name="skip", description=f"Skips the current playing song.")
@@ -62,6 +69,7 @@ def register(tree):
     async def queue_command(interaction: discord.Interaction):
         await queue(create_context(interaction))    
     @tree.command(name="play_album", description=f"Queues all songs in an album.")
+    @app_commands.autocomplete(query=album_autocomplete)
     async def play_album_command(interaction: discord.Interaction, query: str):
         await play_album(create_context(interaction), query)
     @tree.command(name="silent", description=f"Toggles silent mode.")
