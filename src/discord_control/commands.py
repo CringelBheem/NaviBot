@@ -32,7 +32,6 @@ async def play(ctx: CommandContext, query: str):
         voice = ctx.voice
     else:
         voice = await join_check(ctx)
-
     if not voice:
         return
     
