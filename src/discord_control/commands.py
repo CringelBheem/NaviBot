@@ -162,6 +162,7 @@ async def silent(ctx: CommandContext):
     else:
         guild.silent = 1
         await ctx.success()
+        return
 
 async def play_random_album(ctx: CommandContext):
     guild = ctx.guild_state

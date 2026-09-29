@@ -14,10 +14,9 @@ async def error_response(text, guild, respond, failure):
 async def join_check(ctx):
     if ctx.user_voice:
         channel = ctx.user_voice.channel
-        await channel.connect()
+        voice = await channel.connect()
         if ctx.guild_state.silent == 0:
             await ctx.respond("Joined the voice channel.")
-        voice = ctx.voice
         return voice
     else:
         await error_response("You must be in a voice channel.", ctx.guild_state, ctx.respond, ctx.failure)
