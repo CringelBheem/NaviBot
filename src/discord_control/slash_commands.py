@@ -1,7 +1,6 @@
 import discord
 from discord import app_commands
 from discord_control.commands import *
-from state import CommandContext, get_guild
 from navidrome.api import search_navidrome
 
 async def do_nothing():
@@ -10,11 +9,11 @@ async def do_nothing():
 
 def create_context(interaction: discord.Interaction):
 
-    async def respond(text):
+    async def respond(text, view):
         if not interaction.response.is_done():
-            await interaction.response.send_message(text)
+            await interaction.response.send_message(text, view=view)
         else:
-            await interaction.followup.send(text)
+            await interaction.followup.send(text, view=view)
         
 
     return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
