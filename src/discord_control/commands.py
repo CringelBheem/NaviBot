@@ -3,7 +3,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
 import random
-from ui_view import PlayerControls
+from discord_control.ui_view import PlayerControls
 
 async def join(ctx: CommandContext):
     if not ctx.voice:
