@@ -14,7 +14,8 @@ USER_COMMANDS = {
     "!playrandomalbum": play_random_album,
     "!clearqueue": clear_queue,
     "!shufflequeue": shuffle_queue,
-    "!autoplay": autoplay
+    "!autoplay": autoplay,
+    "!previous": previous
 }
 
 PARAM_COMMANDS = {

@@ -91,6 +91,9 @@ def register(tree):
         await shuffle_queue(create_context(interaction))
     @tree.command(name="autoplay", description=f"Toggles autoplay.")
     async def autoplay_command(interaction: discord.Interaction):
-        await autoplay(create_context(interaction))    
+        await autoplay(create_context(interaction))
+    @tree.command(name="previous", description=f"Plays previous track.")
+    async def autoplay_command(interaction: discord.Interaction):
+        await previous(create_context(interaction))    
     
     

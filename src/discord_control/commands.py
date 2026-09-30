@@ -259,3 +259,23 @@ async def autoplay(ctx: CommandContext):
         if guild.silent == 0:
             await ctx.respond(f"Autoplay disabled.")
     await silent_response(ctx.guild_state, ctx.success)
+
+async def previous(ctx: CommandContext):
+    guild = ctx.guild_state
+    
+    voice = ctx.voice
+    if guild.history:
+        last_track = guild.history.pop()
+        track = guild.now_playing
+        if guild.silent == 0:
+            await ctx.respond(f"Playing previous track.")
+    else:
+        error_response("No previous track.", ctx.respond, ctx.failure)
+    
+
+    if voice:
+        guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist']})
+        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist']})
+        voice.stop()
+
+    await silent_response(ctx.guild_state, ctx.success)

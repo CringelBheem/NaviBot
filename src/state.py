@@ -8,7 +8,8 @@ class GuildState:
             "artist": "",
             "track_id": ""
         }
-
+        self.history = []
+        
 guilds = {}
 
 def get_guild(guild_id) -> dict:
