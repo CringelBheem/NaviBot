@@ -48,7 +48,7 @@ class MyClient(discord.Client):
         print(f'Logged on as {self.user}!')
 
     async def on_message(self, message):
-        handle_prefix(self, message)
+        await handle_prefix(self, message)
 
 client = MyClient()
 client.run(os.getenv("DISCORD_BOT_TOKEN"))
