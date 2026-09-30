@@ -9,11 +9,11 @@ async def do_nothing():
 
 def create_context(interaction: discord.Interaction):
 
-    async def respond(text, view):
+    async def respond(content=None, **kwargs):
         if not interaction.response.is_done():
-            await interaction.response.send_message(text, view=view)
+            await interaction.response.send_message(content, **kwargs)
         else:
-            await interaction.followup.send(text, view=view)
+            await interaction.followup.send(content, **kwargs)
         
 
     return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
