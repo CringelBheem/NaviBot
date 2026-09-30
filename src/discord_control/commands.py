@@ -3,6 +3,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
 import random
+from ui_view import PlayerControls
 
 async def join(ctx: CommandContext):
     if not ctx.voice:
@@ -112,10 +113,11 @@ async def resume(ctx: CommandContext):
 
 async def playing(ctx: CommandContext):
     guild = ctx.guild_state
+    view = PlayerControls()
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
-    await ctx.respond(f"**Currently playing**: {guild.now_playing['title']} by {guild.now_playing['artist']}.")
+    await ctx.respond(f"**Currently playing**: {guild.now_playing['title']} by {guild.now_playing['artist']}.", view=view)
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
