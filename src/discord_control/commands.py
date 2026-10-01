@@ -117,7 +117,7 @@ async def playing(ctx: CommandContext):
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
-    await ctx.respond(f"**Currently playing**: {guild.now_playing['title']} by {guild.now_playing['artist']}.", view=view)
+    await ctx.respond(embed=view.build_embed(guild), view=view)
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
@@ -270,8 +270,8 @@ async def previous(ctx: CommandContext):
         if guild.silent == 0:
             await ctx.respond(f"Playing previous track.")
     else:
-        error_response("No previous track.", ctx.respond, ctx.failure)
-    
+        await error_response("No previous track.", guild, ctx.respond, ctx.failure)
+        return
 
     if voice:
         guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist']})
