@@ -2,10 +2,6 @@ from navidrome.api import build_stream_url
 import discord
 from discord import FFmpegPCMAudio
 from navidrome.api import search_random
-from discord_control.ui_view import PlayerControls, update_player
-import asyncio
-
-view = PlayerControls()
 
 def use_queue(voice, guild):
     if len(guild.queue) > 0:
@@ -17,12 +13,10 @@ def use_queue(voice, guild):
         guild.now_playing["artist"] = next_queue["artist"]
         guild.now_playing["track_id"] = next_queue["id"]
         guild.now_playing["cover_art"]= next_queue['cover_art']
+        guild.panel_change = True
         url = build_stream_url(next_track)         
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
-        if guild.player_message:
-            future = asyncio.run_coroutine_threadsafe(update_player(guild), guild.loop)
-            future.result(timeout=5)
     else:
         if guild.autoplay == 1:
             randsong = search_random(1)
