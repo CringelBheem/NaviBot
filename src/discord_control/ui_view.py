@@ -43,4 +43,4 @@ class PlayerControls(discord.ui.View):
 
 async def update_player(guild):
     view = PlayerControls()
-    await guild.player_message.edit(embed=view.build_embed(guild), view=view)
+    await guild.player_message.edit(embed=view.build_embed(guild))
