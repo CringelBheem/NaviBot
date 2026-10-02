@@ -44,6 +44,7 @@ async def add_track(voice, respond, guild, track):
         guild.now_playing["artist"] = track['artist']
         guild.now_playing["track_id"] = track_id
         guild.now_playing["cover_art"]= track['coverArt']
+        guild.panel_change = True
         if guild.silent == 0:
             await respond(f"Playing: {track['title']} by {track['artist']}")
     else:

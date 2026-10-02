@@ -7,30 +7,9 @@ from state import CommandContext, get_guild
 from discord_control.responses import *
 from discord_control.slash_commands import register
 from discord_control.prefix_commands import handle_prefix
+from discord_control.task_loops import update_panels
 
 load_dotenv()
-
-USER_COMMANDS = {
-    "!join": join,
-    "!leave": leave,
-    #"!play": play,
-    #"!search": search,
-    "!skip": skip,
-    "!stop": stop,
-    "!pause": pause,
-    "!resume": resume,
-    "!playing": playing,
-    "!queue": queue,
-    "!parrot": parrot,
-    #"!playalbum": play_album,
-    "!silent": silent,
-    "!playrandomalbum": play_random_album,
-    #"!playrandom": play_random,
-    #"!remove": remove_item,
-    "!clearqueue": clear_queue,
-    "!shufflequeue": shuffle_queue,
-    "!autoplay": autoplay
-}
 
 class MyClient(discord.Client):
     def __init__(self):
@@ -42,6 +21,7 @@ class MyClient(discord.Client):
 
     async def setup_hook(self):
         register(self.tree)
+        update_panels.start()
         await self.tree.sync()
 
     async def on_ready(self):
@@ -52,6 +32,7 @@ class MyClient(discord.Client):
 
 client = MyClient()
 client.run(os.getenv("DISCORD_BOT_TOKEN"))
+
 
 """
 !lyrics
