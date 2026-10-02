@@ -12,5 +12,5 @@ async def update_panels():
             continue
 
         view = PlayerControls()
-        await guild.player_message.edit(embed=view.build_embed(guild))
-        guild.panel_change = True
+        await guild.player_message.edit(embed=view.build_embed(guild), view=view)
+        guild.panel_change = False
