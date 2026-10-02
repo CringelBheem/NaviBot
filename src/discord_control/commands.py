@@ -118,7 +118,8 @@ async def playing(ctx: CommandContext):
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
-    await ctx.respond(embed=view.build_embed(guild), view=view)
+    message = await ctx.respond(embed=view.build_embed(guild), view=view)
+    guild.player_message = message
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state

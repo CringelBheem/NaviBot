@@ -15,8 +15,7 @@ class PlayerControls(discord.ui.View):
         from discord_control.slash_commands import create_context
         from discord_control.commands import previous
         ctx = create_context(interaction)
-        await previous(ctx)
-        await interaction.message.edit(embed=self.build_embed(ctx.guild_state), view=self)
+        await previous(ctx)     
 
     @discord.ui.button(label="⏯️", style=discord.ButtonStyle.primary)
     async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -34,7 +33,6 @@ class PlayerControls(discord.ui.View):
         from discord_control.commands import skip
         ctx = create_context(interaction)
         await skip(ctx)
-        await interaction.message.edit(embed=self.build_embed(ctx.guild_state), view=self)
 
     @discord.ui.button(label="⏹️", style=discord.ButtonStyle.primary)
     async def stop_button(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -42,3 +40,7 @@ class PlayerControls(discord.ui.View):
         from discord_control.commands import stop
         ctx = create_context(interaction)
         await stop(ctx)
+
+async def update_player(guild):
+    view = PlayerControls()
+    await guild.player_message.edit(embed=view.build_embed(guild), view=view)

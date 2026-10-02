@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord_control.commands import *
 from navidrome.api import search_navidrome
+import asyncio
 
 async def do_nothing():
     pass
@@ -15,8 +16,10 @@ def create_context(interaction: discord.Interaction):
         else:
             await interaction.followup.send(content, **kwargs)
         
+    guild = get_guild(interaction.guild.id)
+    guild.loop = asyncio.get_running_loop()
 
-    return CommandContext(guild_state= get_guild(interaction.guild.id), voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
+    return CommandContext(guild_state= guild, voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
 
 async def song_autocomplete(interaction: discord.Interaction, search: str):
     results = search_navidrome(search, "search2")

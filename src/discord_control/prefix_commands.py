@@ -1,5 +1,5 @@
 from discord_control.commands import *
-
+import asyncio
 
 USER_COMMANDS = {
     "!join": join,
@@ -30,7 +30,9 @@ PARAM_COMMANDS = {
 async def handle_prefix(self, message):
     success = lambda: message.add_reaction("✅")
     failure = lambda : message.add_reaction("❌")
-    ctx = CommandContext(guild_state= get_guild(message.guild.id), voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice)
+    guild = get_guild(message.guild.id)
+    guild.loop = asyncio.get_running_loop()
+    ctx = CommandContext(guild_state= guild, voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice)
     if message.author == self.user:
         return
     

@@ -6,10 +6,13 @@ class GuildState:
         self.now_playing = {
             "title": "",
             "artist": "",
-            "track_id": ""
+            "track_id": "",
+            "cover_art": ""
         }
         self.history = []
-        
+        self.player_message = None
+        self.loop = None
+
 guilds = {}
 
 def get_guild(guild_id) -> dict:
