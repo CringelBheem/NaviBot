@@ -138,4 +138,4 @@ def build_stream_url(track_id):
 def get_image(coverArt):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
 
-    return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=CringelBot&t={token}&s={salt}&v=1.16.1&c=Cringel Bot")
+    return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=CringelBot&t={token}&s={salt}&v=1.16.1&c=Cringel%20Bot")
