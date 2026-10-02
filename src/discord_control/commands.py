@@ -118,8 +118,7 @@ async def playing(ctx: CommandContext):
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
-    message = await ctx.respond(embed=view.build_embed(guild), view=view)
-    guild.player_message = message
+    guild.player_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
@@ -276,8 +275,8 @@ async def previous(ctx: CommandContext):
         return
 
     if voice:
-        guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist']})
-        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist']})
+        guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist'], "cover_art": track['cover_art']})
+        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art": last_track['cover_art']})
         voice.stop()
 
     await silent_response(ctx.guild_state, ctx.success)
