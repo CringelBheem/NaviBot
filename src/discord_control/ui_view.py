@@ -7,8 +7,7 @@ class PlayerControls(discord.ui.View):
 
     def build_embed(self, guild):
         embed = discord.Embed(colour=0xdc8e10,title="**Currently Playing**", description=f"{guild.now_playing['title']}\nby {guild.now_playing['artist']}.")
-        embed.set_thumbnail(url=get_image("al-4lH18MkWA49RNmpErrfDpv_6ab30b7c"))
-        #guild.now_playing["cover_art"]
+        embed.set_thumbnail(url=get_image(guild.now_playing["cover_art"]))
         return embed
 
     @discord.ui.button(label="⏮️", style=discord.ButtonStyle.primary)
@@ -41,7 +40,3 @@ class PlayerControls(discord.ui.View):
         from discord_control.commands import stop
         ctx = create_context(interaction)
         await stop(ctx)
-
-async def update_player(guild):
-    view = PlayerControls()
-    await guild.player_message.edit(embed=view.build_embed(guild))
