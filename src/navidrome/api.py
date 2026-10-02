@@ -139,7 +139,7 @@ def get_image(coverArt):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
 
     return(
-        f"{os.getenv("NAVIDROME_URL")}/rest/getCoverArt"
+        f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt"
         f"?id={coverArt}"
         f"&u=CringelBot"
         f"&t={token}"
