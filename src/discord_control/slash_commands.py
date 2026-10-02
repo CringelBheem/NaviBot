@@ -15,11 +15,15 @@ def create_context(interaction: discord.Interaction):
             await interaction.response.send_message(content, **kwargs)
         else:
             await interaction.followup.send(content, **kwargs)
+
+    async def send_player_panel(**kwargs):
+        await interaction.response.send_message(**kwargs)
+        return await interaction.original_response()
         
     guild = get_guild(interaction.guild.id)
     guild.loop = asyncio.get_running_loop()
 
-    return CommandContext(guild_state= guild, voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice)
+    return CommandContext(guild_state= guild, voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice, send_player_panel=send_player_panel)
 
 async def song_autocomplete(interaction: discord.Interaction, search: str):
     results = search_navidrome(search, "search2")

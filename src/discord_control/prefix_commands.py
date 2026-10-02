@@ -32,7 +32,11 @@ async def handle_prefix(self, message):
     failure = lambda : message.add_reaction("❌")
     guild = get_guild(message.guild.id)
     guild.loop = asyncio.get_running_loop()
-    ctx = CommandContext(guild_state= guild, voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice)
+
+    async def send_player_panel(**kwargs):
+        return await message.channel.send(**kwargs)
+    
+    ctx = CommandContext(guild_state= guild, voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice, send_player_panel=send_player_panel)
     if message.author == self.user:
         return
     
