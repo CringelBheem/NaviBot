@@ -19,6 +19,7 @@ async def leave(ctx: CommandContext):
     guild.now_playing["title"] = ""
     guild.now_playing["artist"]= ""
     guild.now_playing["track_id"]= ""
+    guild.now_playing["cover_art"]= ""
     if guild.queue:
         guild.queue.clear()
     if ctx.voice:

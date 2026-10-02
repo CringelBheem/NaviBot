@@ -7,7 +7,7 @@ class PlayerControls(discord.ui.View):
 
     def build_embed(self, guild):
         embed = discord.Embed(colour=0xdc8e10,title="**Currently Playing**", description=f"{guild.now_playing['title']}\nby {guild.now_playing['artist']}.")
-        embed.set_thumbnail(url=get_image(guild.now_playing["track_id"]))
+        embed.set_thumbnail(url=get_image(guild.now_playing["cover_art"]))
 
     @discord.ui.button(label="⏮️", style=discord.ButtonStyle.primary)
     async def previous_button(self, interaction: discord.Interaction, button: discord.ui.Button):
