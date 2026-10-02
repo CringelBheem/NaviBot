@@ -21,7 +21,8 @@ def use_queue(voice, guild):
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
         if guild.player_message:
-            asyncio.run_coroutine_threadsafe(update_player(guild), guild.loop)
+            future = asyncio.run_coroutine_threadsafe(update_player(guild), guild.loop)
+            future.result(timeout=5)
     else:
         if guild.autoplay == 1:
             randsong = search_random(1)
