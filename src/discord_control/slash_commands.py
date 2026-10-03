@@ -4,10 +4,6 @@ from discord_control.commands import *
 from navidrome.api import search_navidrome
 import asyncio
 
-async def do_nothing():
-    pass
-
-
 def create_context(interaction: discord.Interaction):
 
     async def respond(content=None, **kwargs):
@@ -17,10 +13,10 @@ def create_context(interaction: discord.Interaction):
             await interaction.followup.send(content, **kwargs)
 
     async def success():
-        respond("✅", ephemeral=True)
+        await respond("✅", ephemeral=True)
 
     async def failure():
-        respond("❌", ephemeral=True)
+        await respond("❌", ephemeral=True)
         
     async def send_player_panel(**kwargs):
         await interaction.response.send_message(**kwargs)
@@ -29,7 +25,7 @@ def create_context(interaction: discord.Interaction):
     guild = get_guild(interaction.guild.id)
     guild.loop = asyncio.get_running_loop()
 
-    return CommandContext(guild_state= guild, voice=interaction.guild.voice_client, respond=respond, success = do_nothing, failure= do_nothing, user_voice=interaction.user.voice, send_player_panel=send_player_panel)
+    return CommandContext(guild_state= guild, voice=interaction.guild.voice_client, respond=respond, success = success, failure= failure, user_voice=interaction.user.voice, send_player_panel=send_player_panel)
 
 async def song_autocomplete(interaction: discord.Interaction, search: str):
     results = search_navidrome(search, "search2")
