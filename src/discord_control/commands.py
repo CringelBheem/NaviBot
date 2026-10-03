@@ -275,8 +275,8 @@ async def previous(ctx: CommandContext):
         return
 
     if voice:
-        guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist'], "cover_art": track['cover_art']})
-        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art": last_track['cover_art']})
+        guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist'], "cover_art": track['cover_art_url']})
+        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art": last_track['cover_art_url']})
         voice.stop()
 
     await silent_response(ctx.guild_state, ctx.success)
