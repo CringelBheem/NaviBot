@@ -1,5 +1,4 @@
 import discord
-from navidrome.api import get_image
 
 class PlayerControls(discord.ui.View):
     def __init__(self):
