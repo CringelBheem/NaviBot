@@ -121,6 +121,8 @@ async def playing(ctx: CommandContext):
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
+    if guild.player_message:
+        await guild.player_message.delete()
     guild.player_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
 
 async def queue(ctx: CommandContext):

@@ -1,3 +1,4 @@
+import discord
 from discord.ext import tasks
 from state import guilds
 from discord_control.ui_view import PlayerControls
@@ -15,5 +16,8 @@ async def update_panels():
             guild.player_controls = PlayerControls()
         
         view = guild.player_controls
-        await guild.player_message.edit(embed=view.build_embed(guild), view=view)
+        try:
+            await guild.player_message.edit(embed=view.build_embed(guild), view=view)
+        except discord.errors.NotFound:
+            guild.player_message = None
         guild.panel_change = False
