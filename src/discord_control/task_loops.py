@@ -16,8 +16,12 @@ async def update_panels():
             guild.player_controls = PlayerControls()
         
         view = guild.player_controls
+        channel = guild.player_message.channel
+
         try:
-            await guild.player_message.edit(embed=view.build_embed(guild), view=view)
+            if guild.player_message:
+                await guild.player_message.delete()
+            guild.player_message = await channel.send(embed=view.build_embed(guild), view=view)
         except discord.errors.NotFound:
             guild.player_message = None
         guild.panel_change = False
