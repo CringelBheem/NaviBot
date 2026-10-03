@@ -28,6 +28,11 @@ PARAM_COMMANDS = {
 }
 
 async def handle_prefix(self, message):
+    if message.author == self.user:
+        return
+    if not message.content:
+        return    
+    
     success = lambda: message.add_reaction("✅")
     failure = lambda : message.add_reaction("❌")
     guild = get_guild(message.guild.id)
@@ -37,11 +42,6 @@ async def handle_prefix(self, message):
         return await message.channel.send(**kwargs)
     
     ctx = CommandContext(guild_state= guild, voice=message.guild.voice_client, respond=message.channel.send, success=success, failure=failure, user_voice=message.author.voice, send_player_panel=send_player_panel)
-    if message.author == self.user:
-        return
-    
-    if not message.content:
-        return
     
     command = message.content.split()[0]
     if command in PARAM_COMMANDS:
