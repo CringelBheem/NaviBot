@@ -16,6 +16,12 @@ def create_context(interaction: discord.Interaction):
         else:
             await interaction.followup.send(content, **kwargs)
 
+    async def success():
+        respond("✅", ephemeral=True)
+
+    async def failure():
+        respond("❌", ephemeral=True)
+        
     async def send_player_panel(**kwargs):
         await interaction.response.send_message(**kwargs)
         return await interaction.original_response()

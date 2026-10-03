@@ -10,33 +10,58 @@ class PlayerControls(discord.ui.View):
         embed.set_thumbnail(url=guild.now_playing["cover_art_url"])
         return embed
 
-    @discord.ui.button(emoji="⏮️", style=discord.ButtonStyle.success)
+    @discord.ui.button(emoji="⏮️", style=discord.ButtonStyle.primary)
     async def previous_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         from discord_control.slash_commands import create_context
         from discord_control.commands import previous
         ctx = create_context(interaction)
-        await previous(ctx)     
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await previous(ctx)
+            ctx.guild_state.silent = 0
+        else:
+            await previous(ctx)
 
-    @discord.ui.button(emoji="⏯️", style=discord.ButtonStyle.success)
+    @discord.ui.button(emoji="⏯️", style=discord.ButtonStyle.primary)
     async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         from discord_control.slash_commands import create_context
         from discord_control.commands import resume, pause
         ctx = create_context(interaction)
         if ctx.voice.is_paused():
-            await resume(ctx)
+            if not ctx.guild_state.silent:
+                ctx.guild_state.silent = 1
+                await resume(ctx)
+                ctx.guild_state.silent = 0
+            else:
+                await resume(ctx)
         else:
-            await pause(ctx)
+            if not ctx.guild_state.silent:
+                ctx.guild_state.silent = 1
+                await pause(ctx)
+                ctx.guild_state.silent = 0
+            else:
+                await pause(ctx)
 
-    @discord.ui.button(emoji="⏭️", style=discord.ButtonStyle.success)
+    @discord.ui.button(emoji="⏭️", style=discord.ButtonStyle.primary)
     async def skip_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         from discord_control.slash_commands import create_context
         from discord_control.commands import skip
         ctx = create_context(interaction)
-        await skip(ctx)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await skip(ctx)
+            ctx.guild_state.silent = 0
+        else:
+            await skip(ctx)
 
-    @discord.ui.button(emoji="⏹️", style=discord.ButtonStyle.success)
+    @discord.ui.button(emoji="⏹️", style=discord.ButtonStyle.primary)
     async def stop_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         from discord_control.slash_commands import create_context
         from discord_control.commands import stop
         ctx = create_context(interaction)
-        await stop(ctx)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await stop(ctx)
+            ctx.guild_state.silent = 0
+        else:
+            await stop(ctx)
