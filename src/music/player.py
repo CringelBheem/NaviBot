@@ -30,6 +30,7 @@ def use_queue(voice, guild):
             guild.now_playing["artist"]= ""
             guild.now_playing["track_id"]= ""
             guild.now_playing["cover_art"]= ""
+            guild.panel_change = True
             return
 
 async def add_track(voice, respond, guild, track):
