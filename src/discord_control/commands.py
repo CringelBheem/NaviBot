@@ -20,7 +20,6 @@ async def leave(ctx: CommandContext):
     guild.now_playing["artist"]= ""
     guild.now_playing["track_id"]= ""
     guild.now_playing["cover_art"]= ""
-    guild.panel_change = True
     if guild.queue:
         guild.queue.clear()
     if ctx.voice:
@@ -115,7 +114,10 @@ async def resume(ctx: CommandContext):
 
 async def playing(ctx: CommandContext):
     guild = ctx.guild_state
-    view = PlayerControls()
+    if not guild.player_controls:
+        guild.player_controls = PlayerControls()
+    
+    view = guild.player_controls
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return

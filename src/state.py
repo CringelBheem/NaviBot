@@ -13,6 +13,7 @@ class GuildState:
         self.player_message = None
         self.loop = None
         self.panel_change = False
+        self.player_controls = None
 
 guilds = {}
 

@@ -11,6 +11,9 @@ async def update_panels():
         if not guild.player_message:
             continue
 
-        view = PlayerControls()
+        if not guild.player_controls:
+            guild.player_controls = PlayerControls()
+        
+        view = guild.player_controls
         await guild.player_message.edit(embed=view.build_embed(guild), view=view)
         guild.panel_change = False
