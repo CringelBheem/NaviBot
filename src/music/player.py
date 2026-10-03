@@ -13,7 +13,7 @@ def use_queue(voice, guild):
         guild.now_playing["title"] = next_queue["title"]
         guild.now_playing["artist"] = next_queue["artist"]
         guild.now_playing["track_id"] = next_queue["id"]
-        guild.now_playing["cover_art_url"]= get_image(next_queue['cover_art_id'])
+        guild.now_playing["cover_art_url"]= next_queue['cover_art_url']
         guild.panel_change = True
         url = build_stream_url(next_track)         
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
@@ -24,7 +24,7 @@ def use_queue(voice, guild):
             if not randsong:
                 return
             track = randsong[0]
-            guild.queue.insert(0, {"id": track["id"], "title": track['title'], "artist": track['artist'], "cover_art_id": track['coverArt']})
+            guild.queue.insert(0, {"id": track["id"], "title": track['title'], "artist": track['artist'], "cover_art_url": get_image(track['coverArt'])})
             use_queue(voice, guild)
         else:
             guild.now_playing["title"] = ""
@@ -49,6 +49,6 @@ async def add_track(voice, respond, guild, track):
         if guild.silent == 0:
             await respond(f"Playing: {track['title']} by {track['artist']}")
     else:
-        guild.queue.insert(0, {"id": track_id, "title": track['title'], "artist": track['artist'], "cover_art_id": track['coverArt']})
+        guild.queue.insert(0, {"id": track_id, "title": track['title'], "artist": track['artist'], "cover_art_url": get_image(track['coverArt'])})
         if guild.silent == 0:
             await respond(f"Added: {track['title']} by {track['artist']} to queue. Position: {len(guild.queue)}")
