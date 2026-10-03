@@ -2,6 +2,7 @@ from navidrome.api import build_stream_url
 import discord
 from discord import FFmpegPCMAudio
 from navidrome.api import search_random, get_image
+import requests
 
 def use_queue(voice, guild):
     if len(guild.queue) > 0:
@@ -12,7 +13,10 @@ def use_queue(voice, guild):
         guild.now_playing["title"] = next_queue["title"]
         guild.now_playing["artist"] = next_queue["artist"]
         guild.now_playing["track_id"] = next_queue["id"]
-        guild.now_playing["cover_art_url"]= next_queue['cover_art_url']
+        cover_url = next_queue['cover_art_url']
+        requests.get(cover_url)
+        guild.now_playing["cover_art_url"] = cover_url
+        #guild.now_playing["cover_art_url"]= next_queue['cover_art_url']
         guild.panel_change = True
         url = build_stream_url(next_track)         
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
@@ -43,6 +47,9 @@ async def add_track(voice, respond, guild, track):
         guild.now_playing["title"] = track['title']
         guild.now_playing["artist"] = track['artist']
         guild.now_playing["track_id"] = track_id
+        cover_url = get_image(track['coverArt'])
+        requests.get(cover_url)
+        guild.now_playing["cover_art_url"]= cover_url
         guild.now_playing["cover_art_url"]= get_image(track['coverArt'])
         guild.panel_change = True
         if guild.silent == 0:
