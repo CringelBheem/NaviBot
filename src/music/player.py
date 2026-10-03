@@ -23,7 +23,7 @@ def use_queue(voice, guild):
             if not randsong:
                 return
             track = randsong[0]
-            guild.queue.insert(0, {"id": track["id"], "title": track['title'], "artist": track['artist'], "cover_art": track['coverArt']})
+            guild.queue.insert(0, {"id": track["id"], "title": track['title'], "artist": track['artist'], "cover_art_url": get_image(track['coverArt'])})
             use_queue(voice, guild)
         else:
             guild.now_playing["title"] = ""
