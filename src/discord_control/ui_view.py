@@ -7,7 +7,8 @@ class PlayerControls(discord.ui.View):
 
     def build_embed(self, guild):
         embed = discord.Embed(colour=0xdc8e10,title="**Currently Playing**", description=f"{guild.now_playing['title']}\nby {guild.now_playing['artist']}.")
-        embed.set_image(url=get_image(guild.now_playing["cover_art"]))
+        embed.set_image(url="https://cdn.discordapp.com/embed/avatars/0.png")
+        #get_image(guild.now_playing["cover_art"])
         return embed
 
     @discord.ui.button(label="⏮️", style=discord.ButtonStyle.primary)
