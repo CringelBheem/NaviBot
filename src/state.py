@@ -7,7 +7,7 @@ class GuildState:
             "title": "",
             "artist": "",
             "track_id": "",
-            "cover_art": ""
+            "cover_art_url": ""
         }
         self.history = []
         self.player_message = None
