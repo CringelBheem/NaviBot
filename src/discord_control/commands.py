@@ -123,7 +123,7 @@ async def playing(ctx: CommandContext):
         return
     if guild.player_message:
         await guild.player_message.delete()
-    guild.player_message = await ctx.send_player_panel(embeds=view.build_embed(guild), view=view)
+    guild.player_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
@@ -135,7 +135,7 @@ async def queue(ctx: CommandContext):
         return
     if guild.queue_message:
         await guild.queue_message.delete()
-    guild.queue_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
+    guild.queue_message = await ctx.send_player_panel(embeds=view.build_embed(guild), view=view)
 
 
     """
