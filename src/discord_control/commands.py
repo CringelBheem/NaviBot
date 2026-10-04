@@ -1,4 +1,5 @@
 from state import get_guild, CommandContext
+import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
@@ -122,7 +123,10 @@ async def playing(ctx: CommandContext):
         await ctx.respond("Nothing is currently playing.")
         return
     if guild.player_message:
-        await guild.player_message.delete()
+        try:
+            await guild.player_message.delete()
+        except discord.NotFound:
+            pass
     guild.player_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
 
 async def queue(ctx: CommandContext):
@@ -134,7 +138,10 @@ async def queue(ctx: CommandContext):
         await ctx.respond("Nothing is currently playing.")
         return
     if guild.queue_message:
-        await guild.queue_message.delete()
+        try:
+            await guild.queue_message.delete()
+        except discord.NotFound:
+            pass
     guild.queue_message = await ctx.send_player_panel(embeds=view.build_embed(guild), view=view)
 
 
