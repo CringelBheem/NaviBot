@@ -90,6 +90,8 @@ class QueueConrols(discord.ui.View):
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.page > 0:
             self.page -= 1
+        else:
+            button.style=discord.ButtonStyle.grey
         guild = get_guild(interaction.guild.id)
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
 
@@ -97,5 +99,7 @@ class QueueConrols(discord.ui.View):
     async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
         guild = get_guild(interaction.guild.id)
         if self.page < ((len(guild.queue) - 1) // 9):
-            self.page += 1
+            self.page += 1 
+        else:
+            button.style=discord.ButtonStyle.grey
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
