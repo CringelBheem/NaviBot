@@ -11,9 +11,11 @@ class GuildState:
         }
         self.history = []
         self.player_message = None
+        self.queue_message = None
         self.loop = None
         self.panel_change = False
         self.player_controls = None
+        self.queue_controls = None
 
 guilds = {}
 

@@ -1,4 +1,5 @@
 import discord
+from state import get_guild
 
 class PlayerControls(discord.ui.View):
     def __init__(self):
@@ -64,3 +65,37 @@ class PlayerControls(discord.ui.View):
             ctx.guild_state.silent = 0
         else:
             await stop(ctx)
+
+class QueueConrols(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout = None)
+        self.page = 0
+    
+    def build_embed(self, guild):
+        embed1 = discord.Embed(colour=0xdc8e10,title="**Currently Playing**", description=f"{guild.now_playing['title']}\nby {guild.now_playing['artist']}.")
+        embed1.set_thumbnail(url=guild.now_playing["cover_art_url"])
+        embeds = [embed1]
+        description = ""
+        rev_queue = list(reversed(guild.queue))
+        for i in range((self.page*9), ((self.page+1)*9)):
+            if i < len(rev_queue):
+                description += f"**{i+1}:** {rev_queue[i]['title']} by {rev_queue[i]['artist']}.\n"
+            else:
+                break
+        queue_embed = discord.Embed(colour=0xdc8e10,title="**Queue:** ", description=f"{description}")
+        embeds.append(queue_embed)
+        return embeds
+
+    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
+    async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.page > 0:
+            self.page -= 1
+        guild = get_guild(interaction.guild.id)
+        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
+
+    @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
+    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+        guild = get_guild(interaction.guild.id)
+        if self.page < ((len(guild.queue) - 1) // 9):
+            self.page += 1
+        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)

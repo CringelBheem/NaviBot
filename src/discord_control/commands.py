@@ -3,7 +3,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
 import random
-from discord_control.ui_view import PlayerControls
+from discord_control.ui_view import PlayerControls, QueueConrols
 
 async def join(ctx: CommandContext):
     if not ctx.voice:
@@ -127,6 +127,18 @@ async def playing(ctx: CommandContext):
 
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
+    if not guild.queue_controls:
+        guild.queue_controls = QueueConrols()
+    view = guild.queue_controls
+    if (not guild.now_playing or guild.now_playing["title"] == ""):
+        await ctx.respond("Nothing is currently playing.")
+        return
+    if guild.queue_message:
+        await guild.queue_message.delete()
+    guild.queue_message = await ctx.send_player_panel(embed=view.build_embed(guild), view=view)
+
+
+    """
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
         return
@@ -134,7 +146,8 @@ async def queue(ctx: CommandContext):
     for i, track in enumerate(reversed(guild.queue)):
         reply += f"**{i+1}: ** {track['title']} by {track['artist']}.\n"
     await ctx.respond(reply)
-    
+    """
+
 async def parrot(ctx: CommandContext, parrot_text):
     await ctx.respond(parrot_text)
     #await message.delete()
