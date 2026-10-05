@@ -98,7 +98,7 @@ class QueueConrols(discord.ui.View):
         guild = get_guild(interaction.guild.id)
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
 
-    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
+    @discord.ui.button(emoji="🔀", style=discord.ButtonStyle.primary)
     async def shuffle_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.page=0
 
