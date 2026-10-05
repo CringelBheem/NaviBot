@@ -70,21 +70,68 @@ class QueueConrols(discord.ui.View):
     def __init__(self):
         super().__init__(timeout = None)
         self.page = 0
+        self.page_queue = []
     
     def build_embed(self, guild):
         embed1 = discord.Embed(colour=0xdc8e10,title="**Currently Playing**", description=f"{guild.now_playing['title']}\nby {guild.now_playing['artist']}.")
         embed1.set_thumbnail(url=guild.now_playing["cover_art_url"])
         embeds = [embed1]
         description = ""
+        self.page_queue = []
         rev_queue = list(reversed(guild.queue))
         for i in range((self.page*9), ((self.page+1)*9)):
             if i < len(rev_queue):
                 description += f"**{i+1}:** {rev_queue[i]['title']} by {rev_queue[i]['artist']}.\n"
+                self.page_queue.append([i, {rev_queue[i]['title']}, {rev_queue[i]['artist']}])
             else:
                 break
         queue_embed = discord.Embed(colour=0xdc8e10,title="**Queue:** ", description=f"{description}")
         embeds.append(queue_embed)
         return embeds
+
+    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
+    async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.page > 0:
+            self.page -= 1
+        else:
+            button.style=discord.ButtonStyle.grey
+        guild = get_guild(interaction.guild.id)
+        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
+
+    @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
+    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+        guild = get_guild(interaction.guild.id)
+        if self.page < ((len(guild.queue) - 1) // 9):
+            self.page += 1 
+        else:
+            button.style=discord.ButtonStyle.grey
+        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
+
+class SearchResult(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout = None)
+        self.page = 0
+        self.page_queue = []
+    
+    def build_embed(self, guild, artists, albums, songs):
+        reply = ""
+        if len(artists) > 0:
+            reply += "\n**Artists: **\n"
+            for artist in artists:
+                reply += f" - {artist}\n"
+        if len(albums) > 0:
+            reply += "\n**Albums: **\n"
+            for album in albums:
+                reply += f" - {album}\n"
+        if len(songs) > 0:
+            reply += "\n**Songs: **\n"
+            for song in songs[:10]:
+                reply += f" - {song}\n"
+        if reply:
+            result_embed = discord.Embed(colour=0xdc8e10,title="**Search Results:** ", description=f"{reply}")
+            return result_embed
+        else:
+            return None
 
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
