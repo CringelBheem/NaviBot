@@ -89,10 +89,11 @@ class QueueConrols(discord.ui.View):
         embeds.append(queue_embed)
         return embeds
 
-    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
+    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.grey)
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.page > 0:
             self.page -= 1
+            button.style=discord.ButtonStyle.primary
         else:
             button.style=discord.ButtonStyle.grey
         guild = get_guild(interaction.guild.id)
@@ -111,7 +112,7 @@ class QueueConrols(discord.ui.View):
             ctx.guild_state.silent = 0
         else:
             await shuffle_queue(ctx)
-        await interaction.response.edit_message(embeds=self.build_embed(ctx.guild), view=self)
+        await interaction.response.edit_message(embeds=self.build_embed(ctx.guild_state), view=self)
 
     @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
     async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
