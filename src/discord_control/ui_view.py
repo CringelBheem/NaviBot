@@ -145,7 +145,7 @@ class SearchResult(discord.ui.View):
             return result_embed
         else:
             return None
-
+    """
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.page > 0:
@@ -162,4 +162,4 @@ class SearchResult(discord.ui.View):
             self.page += 1 
         else:
             button.style=discord.ButtonStyle.grey
-        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
+        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)"""
