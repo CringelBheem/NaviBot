@@ -98,6 +98,21 @@ class QueueConrols(discord.ui.View):
         guild = get_guild(interaction.guild.id)
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
 
+    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
+    async def shuffle_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.page=0
+
+        from discord_control.slash_commands import create_context
+        from discord_control.commands import shuffle_queue
+        ctx = create_context(interaction)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await shuffle_queue(ctx)
+            ctx.guild_state.silent = 0
+        else:
+            await shuffle_queue(ctx)
+        await interaction.response.edit_message(embeds=self.build_embed(ctx.guild), view=self)
+
     @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
     async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
         guild = get_guild(interaction.guild.id)
@@ -110,8 +125,6 @@ class QueueConrols(discord.ui.View):
 class SearchResult(discord.ui.View):
     def __init__(self):
         super().__init__(timeout = None)
-        self.page = 0
-        self.page_queue = []
     
     def build_embed(self, guild, artists, albums, songs):
         reply = ""
