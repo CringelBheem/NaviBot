@@ -1,4 +1,5 @@
 import discord
+import random
 from state import get_guild
 
 class PlayerControls(discord.ui.View):
@@ -102,16 +103,12 @@ class QueueConrols(discord.ui.View):
     @discord.ui.button(emoji="🔀", style=discord.ButtonStyle.primary)
     async def shuffle_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.page=0
-
         from discord_control.slash_commands import create_context
         from discord_control.commands import shuffle_queue
         ctx = create_context(interaction)
-        if not ctx.guild_state.silent:
-            ctx.guild_state.silent = 1
-            await shuffle_queue(ctx)
-            ctx.guild_state.silent = 0
-        else:
-            await shuffle_queue(ctx)
+        guild = ctx.guild_state
+        if guild.queue:
+            random.shuffle(guild.queue)
         await interaction.response.edit_message(embeds=self.build_embed(ctx.guild_state), view=self)
 
     @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
