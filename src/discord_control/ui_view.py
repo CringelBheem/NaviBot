@@ -123,6 +123,8 @@ class QueueConrols(discord.ui.View):
 class SearchResult(discord.ui.View):
     def __init__(self):
         super().__init__(timeout = None)
+        self.selections = []
+        self.add_item(SelectMenu(selections=self.selections))
     
     def build_embed(self, guild, artists, albums, songs):
         reply = ""
@@ -138,11 +140,14 @@ class SearchResult(discord.ui.View):
             reply += "\n**Songs: **\n"
             for song in songs[:10]:
                 reply += f" - {song}\n"
+        self.selections = artists[:10] + albums[:10] + songs[:10]
+        
         if reply:
             result_embed = discord.Embed(colour=0xdc8e10,title="**Search Results:** ", description=f"{reply}")
             return result_embed
         else:
             return None
+
     """
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -161,3 +166,11 @@ class SearchResult(discord.ui.View):
         else:
             button.style=discord.ButtonStyle.grey
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)"""
+
+class SelectMenu(discord.ui.Select):
+    def __init__(self, selections):
+        options = []
+        for i, selection in enumerate(selections):
+            option = discord.SelectOption(label=f"{i}",emoji="🎵",description="{selection}")
+            options.append(option)
+        super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
