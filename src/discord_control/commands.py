@@ -57,6 +57,7 @@ async def search(ctx: CommandContext, query):
     artists = [a["name"] for a in results.get("artist", [])]
     albums = [a["name"] for a in results.get("album", [])]
     songs = [s["title"] for s in results.get("song", [])]
+    results = artists[:10] + albums[:10] + songs[:10]
     """if len(artists) > 0:
         reply += "\n**Artists: **\n"
         for artist in artists:
@@ -70,7 +71,7 @@ async def search(ctx: CommandContext, query):
         for song in songs[:10]:
             reply += f" - {song}\n"
     if not reply:"""
-    view = SearchResult()
+    view = SearchResult(results)
     embed = view.build_embed(guild, artists, albums, songs)
     if not embed:
         await error_response("No results found.", guild, ctx.respond, ctx.failure)
