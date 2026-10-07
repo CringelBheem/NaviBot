@@ -121,11 +121,12 @@ class QueueConrols(discord.ui.View):
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
 
 class SearchResult(discord.ui.View):
-    def __init__(self, selections):
+    def __init__(self, selections, results_ids):
         super().__init__(timeout = None)
-        self.selections = []
+        self.selections = selections
+        self.ids = results_ids
         self.selected = None
-        self.add_item(SelectMenu(selections, self))
+        self.add_item(SelectMenu(selections, results_ids, self))
     
     def build_embed(self, guild, artists, albums, songs):
         reply = ""
@@ -181,11 +182,11 @@ class SearchResult(discord.ui.View):
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)"""
 
 class SelectMenu(discord.ui.Select):
-    def __init__(self, selections, view):
+    def __init__(self, selections, results_id, view):
         self.parent_view = view
         options = []
         for i, selection in enumerate(selections):
-            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=selection)
+            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=results_id[i])
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):

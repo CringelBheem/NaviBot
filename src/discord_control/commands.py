@@ -53,11 +53,14 @@ async def search(ctx: CommandContext, query):
     guild = ctx.guild_state
 
     results = search_navidrome(query, "search2")
-    reply = ""
     artists = [a["name"] for a in results.get("artist", [])]
+    artists_ids = [a["id"] for a in results.get("artist", [])]
     albums = [a["name"] for a in results.get("album", [])]
+    albums_ids = [a["id"] for a in results.get("album", [])]
     songs = [s["title"] for s in results.get("song", [])]
+    songs_ids = [s["id"] for s in results.get("song", [])]
     results = artists[:10] + albums[:10] + songs[:10]
+    results_id = artists_ids[:10] + albums_ids[:10] + songs_ids[:10]
     """if len(artists) > 0:
         reply += "\n**Artists: **\n"
         for artist in artists:
@@ -71,7 +74,7 @@ async def search(ctx: CommandContext, query):
         for song in songs[:10]:
             reply += f" - {song}\n"
     if not reply:"""
-    view = SearchResult(results)
+    view = SearchResult(results, results_id)
     embed = view.build_embed(guild, artists, albums, songs)
     if not embed:
         await error_response("No results found.", guild, ctx.respond, ctx.failure)
@@ -308,4 +311,8 @@ async def previous(ctx: CommandContext):
         guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art_url": last_track['cover_art_url']})
         voice.stop()
 
+    await silent_response(ctx.guild_state, ctx.success)
+
+async def play_id(ctx: CommandContext, id):
+    await add_track(ctx.voice, ctx.respond, ctx.guild_state, id)
     await silent_response(ctx.guild_state, ctx.success)
