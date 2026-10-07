@@ -124,6 +124,7 @@ class SearchResult(discord.ui.View):
     def __init__(self, selections):
         super().__init__(timeout = None)
         self.selections = []
+        self.selected = None
         self.add_item(SelectMenu(selections))
     
     def build_embed(self, guild, artists, albums, songs):
@@ -146,6 +147,18 @@ class SearchResult(discord.ui.View):
         else:
             return None
 
+    @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
+    async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        from discord_control.slash_commands import create_context
+        from discord_control.commands import play
+        ctx = create_context(interaction)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await play(ctx, self.values[0])
+            ctx.guild_state.silent = 0
+        else:
+            await play(ctx, self.values[0])
+
     """
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
     async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -167,20 +180,12 @@ class SearchResult(discord.ui.View):
 
 class SelectMenu(discord.ui.Select):
     def __init__(self, selections):
+        self.parent_view = self.parent
         options = []
         for i, selection in enumerate(selections):
-            option = discord.SelectOption(label=f"{i}",emoji="🎵",description=f"{selection}")
+            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=selection)
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
-
-    @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
-    async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        from discord_control.slash_commands import create_context
-        from discord_control.commands import play
-        ctx = create_context(interaction)
-        if not ctx.guild_state.silent:
-            ctx.guild_state.silent = 1
-            await play(ctx, self.values[0])
-            ctx.guild_state.silent = 0
-        else:
-            await play(ctx, self.values[0])
+    async def callback(self, interaction):
+        self.parent_view.selected = self.values[0]
+    
