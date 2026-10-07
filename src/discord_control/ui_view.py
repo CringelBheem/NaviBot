@@ -125,7 +125,7 @@ class SearchResult(discord.ui.View):
         super().__init__(timeout = None)
         self.selections = selections
         self.ids = results_ids
-        self.selected = None
+        #self.selected = None
         self.add_item(SelectMenu(selections, results_ids, self))
     
     def build_embed(self, guild, artists, albums, songs):
@@ -147,7 +147,7 @@ class SearchResult(discord.ui.View):
             return result_embed
         else:
             return None
-
+    """
     @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
     async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.selected is None:
@@ -160,7 +160,8 @@ class SearchResult(discord.ui.View):
             await play(ctx, self.selected)
             ctx.guild_state.silent = 0
         else:
-            await play(ctx, self.selected)
+            await play(ctx, self.selected)"""
+    
 
     """
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
@@ -190,5 +191,14 @@ class SelectMenu(discord.ui.Select):
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):
-        self.parent_view.selected = self.values[0]
+        #self.parent_view.selected = self.values[0]
+        from discord_control.slash_commands import create_context
+        from discord_control.commands import play
+        ctx = create_context(interaction)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await play(ctx, self.values[0])
+            ctx.guild_state.silent = 0
+        else:
+            await play(ctx, self.values[0])
     
