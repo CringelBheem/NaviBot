@@ -172,3 +172,15 @@ class SelectMenu(discord.ui.Select):
             option = discord.SelectOption(label=f"{i}",emoji="🎵",description=f"{selection}")
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
+
+    @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
+    async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        from discord_control.slash_commands import create_context
+        from discord_control.commands import play
+        ctx = create_context(interaction)
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await play(ctx, self.values[0])
+            ctx.guild_state.silent = 0
+        else:
+            await play(ctx, self.values[0])
