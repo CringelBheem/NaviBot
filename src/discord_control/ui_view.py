@@ -125,7 +125,7 @@ class SearchResult(discord.ui.View):
         super().__init__(timeout = None)
         self.selections = []
         self.selected = None
-        self.add_item(SelectMenu(selections))
+        self.add_item(SelectMenu(selections, self))
     
     def build_embed(self, guild, artists, albums, songs):
         reply = ""
@@ -149,15 +149,17 @@ class SearchResult(discord.ui.View):
 
     @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
     async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.selected is None:
+            button.style=discord.ButtonStyle.grey
         from discord_control.slash_commands import create_context
         from discord_control.commands import play
         ctx = create_context(interaction)
         if not ctx.guild_state.silent:
             ctx.guild_state.silent = 1
-            await play(ctx, self.values[0])
+            await play(ctx, self.selected)
             ctx.guild_state.silent = 0
         else:
-            await play(ctx, self.values[0])
+            await play(ctx, self.selected)
 
     """
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
@@ -179,8 +181,8 @@ class SearchResult(discord.ui.View):
         await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)"""
 
 class SelectMenu(discord.ui.Select):
-    def __init__(self, selections):
-        self.parent_view = self.parent
+    def __init__(self, selections, view):
+        self.parent_view = view
         options = []
         for i, selection in enumerate(selections):
             option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=selection)
