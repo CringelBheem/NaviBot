@@ -1,7 +1,7 @@
 import discord
 from discord.ext import tasks
 from state import guilds
-from discord_control.ui_view import PlayerControls
+from discord_control.ui_view import PlayerControls, QueueControls
 
 @tasks.loop(seconds=0.3)
 async def update_panels():
@@ -14,9 +14,14 @@ async def update_panels():
 
         if not guild.player_controls:
             guild.player_controls = PlayerControls()
+
+        if not guild.player_controls:
+            guild.queue_controls = QueueControls()
         
         view = guild.player_controls
+        queue_view = guild.queue_controls
         channel = guild.player_message.channel
+        queue_channel = guild.queue_message.channel
 
         try:
             if guild.player_message:
@@ -24,4 +29,12 @@ async def update_panels():
             guild.player_message = await channel.send(embed=view.build_embed(guild), view=view)
         except discord.errors.NotFound:
             guild.player_message = None
+
+        try:
+            if guild.queue_message:
+                await guild.queue_message.delete()
+            guild.queue_message = await queue_channel.send(embed=view.build_embed(guild), view=queue_view)
+        except discord.errors.NotFound:
+            guild.queue_message = None
+
         guild.panel_change = False

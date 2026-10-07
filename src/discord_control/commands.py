@@ -4,7 +4,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track
 from navidrome.api import search_navidrome, search_album, search_random
 import random
-from discord_control.ui_view import PlayerControls, QueueConrols, SearchResult
+from discord_control.ui_view import PlayerControls, QueueControls, SearchResult
 
 async def join(ctx: CommandContext):
     if not ctx.voice:
@@ -139,7 +139,7 @@ async def playing(ctx: CommandContext):
 async def queue(ctx: CommandContext):
     guild = ctx.guild_state
     if not guild.queue_controls:
-        guild.queue_controls = QueueConrols()
+        guild.queue_controls = QueueControls()
     view = guild.queue_controls
     if (not guild.now_playing or guild.now_playing["title"] == ""):
         await ctx.respond("Nothing is currently playing.")
@@ -311,8 +311,4 @@ async def previous(ctx: CommandContext):
         guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art_url": last_track['cover_art_url']})
         voice.stop()
 
-    await silent_response(ctx.guild_state, ctx.success)
-
-async def play_id(ctx: CommandContext, id):
-    await add_track(ctx.voice, ctx.respond, ctx.guild_state, id)
     await silent_response(ctx.guild_state, ctx.success)
