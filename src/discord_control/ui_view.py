@@ -187,7 +187,7 @@ class SelectMenu(discord.ui.Select):
         self.parent_view = view
         options = []
         for i, selection in enumerate(selections):
-            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=results_id[i])
+            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=f"{i}&{selection}")
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):
@@ -195,10 +195,11 @@ class SelectMenu(discord.ui.Select):
         from discord_control.slash_commands import create_context
         from discord_control.commands import play
         ctx = create_context(interaction)
+        search = self.values[0].split("&")[1]
         if not ctx.guild_state.silent:
             ctx.guild_state.silent = 1
-            await play(ctx, self.values[0])
+            await play(ctx, search)
             ctx.guild_state.silent = 0
         else:
-            await play(ctx, self.values[0])
+            await play(ctx, search)
     
