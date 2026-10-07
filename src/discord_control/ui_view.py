@@ -143,7 +143,7 @@ class SearchResult(discord.ui.View):
             for song in songs[:10]:
                 reply += f" - {song}\n"
         if reply:
-            result_embed = discord.Embed(colour=0xdc8e10,title="**          Search Results:** ", description=f"{reply}")
+            result_embed = discord.Embed(colour=0xdc8e10,title="**                          Search Results:                          ** ", description=f"{reply}")
             return result_embed
         else:
             return None
