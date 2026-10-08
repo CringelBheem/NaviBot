@@ -15,7 +15,10 @@ async def update_panels():
             queue_view = guild.queue_controls
             queue_channel = guild.queue_message.channel
             try:
-                await guild.queue_message.edit(embeds=queue_view.build_embed(guild), view=queue_view)
+                if guild.queue_message:
+                    await guild.queue_message.delete()
+                guild.queue_controls.refresh_buttons(guild)
+                guild.queue_message = await queue_channel.send(embeds=queue_view.build_embed(guild), view=queue_view)
             except discord.errors.NotFound:
                 guild.queue_message = None
         
