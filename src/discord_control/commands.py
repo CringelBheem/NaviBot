@@ -149,6 +149,7 @@ async def queue(ctx: CommandContext):
             await guild.queue_message.delete()
         except discord.NotFound:
             pass
+    guild.queue_controls.refresh_buttons(guild)    
     guild.queue_message = await ctx.send_player_panel(embeds=view.build_embed(guild), view=view)
 
 

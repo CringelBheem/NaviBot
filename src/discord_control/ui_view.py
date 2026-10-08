@@ -34,18 +34,22 @@ class PlayerControls(discord.ui.View):
                 await resume(ctx)
                 ctx.guild_state.silent = 0
                 button.emoji="⏸️"
+                ctx.guild_state.panel_change = True
             else:
                 await resume(ctx)
                 button.emoji="⏸️"
+                ctx.guild_state.panel_change = True
         else:
             if not ctx.guild_state.silent:
                 ctx.guild_state.silent = 1
                 await pause(ctx)
                 ctx.guild_state.silent = 0
                 button.emoji="▶️"
+                ctx.guild_state.panel_change = True
             else:
                 await pause(ctx)
                 button.emoji="▶️"
+                ctx.guild_state.panel_change = True
 
     @discord.ui.button(emoji="⏭️", style=discord.ButtonStyle.primary)
     async def skip_button(self, interaction: discord.Interaction, button: discord.ui.Button):
