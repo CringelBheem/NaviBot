@@ -50,5 +50,6 @@ async def add_track(voice, respond, guild, track):
             await respond(f"Playing: {track['title']} by {track['artist']}")
     else:
         guild.queue.insert(0, {"id": track_id, "title": track['title'], "artist": track['artist'], "cover_art_url": get_image(track['coverArt'])})
+        guild.panel_change = True
         if guild.silent == 0:
             await respond(f"Added: {track['title']} by {track['artist']} to queue. Position: {len(guild.queue)}")
