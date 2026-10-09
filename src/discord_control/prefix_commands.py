@@ -23,6 +23,7 @@ PARAM_COMMANDS = {
     "!search": search,
     #"!parrot": parrot,
     "!playalbum": play_album,
+    "!lyrics": get_lyrics
     #"!playrandom": play_random,
     #"!remove": remove_item
 }

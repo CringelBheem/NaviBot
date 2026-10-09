@@ -118,7 +118,7 @@ def search_similar(track_id, size):
     data = r.json()
     #print("JSON RESPONSE:",data)
     try:
-        return data["subsonic-response"]["similarSongs"]["song"]
+        return data["subsonic-response"]["lyrics"]["value"]
     except KeyError:
         return []
 
@@ -139,3 +139,28 @@ def get_image(coverArt):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
 
     return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=CringelBot&t={token}&s={salt}&v=1.16.1&c=Cringel%20Bot")
+
+def get_lyrics(track_title):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/getLyrics"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+
+    params = {
+            "title": track_title,
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    
+
+    r = requests.get(url, params=params)
+    #print("STATUS:", r.status_code)
+    data = r.json()
+    #print("JSON RESPONSE:",data)
+    try:
+        return data["subsonic-response"]["similarSongs"]["song"]
+    except KeyError:
+        return []

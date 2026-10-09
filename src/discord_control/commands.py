@@ -2,7 +2,7 @@ from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track
-from navidrome.api import search_navidrome, search_album, search_random
+from navidrome.api import search_navidrome, search_album, search_random, get_lyrics
 import random
 from discord_control.ui_view import PlayerControls, QueueControls, SearchResult
 
@@ -313,3 +313,7 @@ async def previous(ctx: CommandContext):
         voice.stop()
 
     await silent_response(ctx.guild_state, ctx.success)
+
+async def lyrics(ctx: CommandContext, song):
+    song_lyrics = get_lyrics(song)
+    await ctx.respond(song_lyrics)
