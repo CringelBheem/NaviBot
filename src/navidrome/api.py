@@ -118,7 +118,7 @@ def search_similar(track_id, size):
     data = r.json()
     #print("JSON RESPONSE:",data)
     try:
-        return data["subsonic-response"]["lyrics"]["value"]
+        return data["subsonic-response"]["similarSongs"]["song"]
     except KeyError:
         return []
 
@@ -161,6 +161,6 @@ def get_lyrics(track_title):
     data = r.json()
     #print("JSON RESPONSE:",data)
     try:
-        return data["subsonic-response"]["similarSongs"]["song"]
+        return data["subsonic-response"]["lyrics"]["value"]
     except KeyError:
         return []
