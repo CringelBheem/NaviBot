@@ -140,13 +140,13 @@ def get_image(coverArt):
 
     return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=CringelBot&t={token}&s={salt}&v=1.16.1&c=Cringel%20Bot")
 
-def get_lyrics(track_title):
-    url = os.getenv("NAVIDROME_URL")+f"/rest/getLyrics"
+def get_lyrics(track_id):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/getLyricsBySongId"
 
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
 
     params = {
-            "title": track_title,
+            "id": track_id,
             "u": "CringelBot",
             "t": token,
             "s": salt,
@@ -157,10 +157,13 @@ def get_lyrics(track_title):
     
 
     r = requests.get(url, params=params)
-    #print("STATUS:", r.status_code)
+    #print("STATUS:", r.status_code) 
     data = r.json()
     #print("JSON RESPONSE:",data)
     try:
-        return data["subsonic-response"]["lyrics"]["value"]
+        return data["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]
     except KeyError:
         return []
+
+print(search_navidrome("Zanzibar", "search2"))
+print(get_lyrics("mFd4XbOxI2F8ohyY6oRZYn"))
