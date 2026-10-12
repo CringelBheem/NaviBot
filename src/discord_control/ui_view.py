@@ -183,40 +183,6 @@ class SearchResult(discord.ui.View):
             return result_embed
         else:
             return None
-    """
-    @discord.ui.button(emoji="▶️", style=discord.ButtonStyle.primary)
-    async def play_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.selected is None:
-            button.style=discord.ButtonStyle.grey
-        from discord_control.slash_commands import create_context
-        from discord_control.commands import play
-        ctx = create_context(interaction)
-        if not ctx.guild_state.silent:
-            ctx.guild_state.silent = 1
-            await play(ctx, self.selected)
-            ctx.guild_state.silent = 0
-        else:
-            await play(ctx, self.selected)"""
-    
-
-    """
-    @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.primary)
-    async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.page > 0:
-            self.page -= 1
-        else:
-            button.style=discord.ButtonStyle.grey
-        guild = get_guild(interaction.guild.id)
-        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)
-
-    @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.primary)
-    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
-        guild = get_guild(interaction.guild.id)
-        if self.page < ((len(guild.queue) - 1) // 9):
-            self.page += 1 
-        else:
-            button.style=discord.ButtonStyle.grey
-        await interaction.response.edit_message(embeds=self.build_embed(guild), view=self)"""
 
 class SelectMenu(discord.ui.Select):
     def __init__(self, selections, results_id, view):

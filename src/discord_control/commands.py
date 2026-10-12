@@ -315,5 +315,8 @@ async def previous(ctx: CommandContext):
     await silent_response(ctx.guild_state, ctx.success)
 
 async def lyrics(ctx: CommandContext, song):
+    #get the runtime of song
+    #add all lyrics less than that to an embed
+    #when time of next line is reached, edit embed with new line
     song_lyrics = get_lyrics(song)
     await ctx.respond(song_lyrics)

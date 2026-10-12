@@ -164,6 +164,3 @@ def get_lyrics(track_id):
         return data["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]
     except KeyError:
         return []
-
-print(search_navidrome("Zanzibar", "search2"))
-print(get_lyrics("mFd4XbOxI2F8ohyY6oRZYn"))
