@@ -3,7 +3,6 @@ from discord_control.commands import *
 from discord import app_commands
 import  os
 from dotenv import load_dotenv
-from state import CommandContext, get_guild
 from discord_control.responses import *
 from discord_control.slash_commands import register
 from discord_control.prefix_commands import handle_prefix
