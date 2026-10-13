@@ -16,6 +16,7 @@ class GuildState:
         self.panel_change = False
         self.player_controls = None
         self.queue_controls = None
+        self.previous_pressed = False
 
 guilds = {}
 

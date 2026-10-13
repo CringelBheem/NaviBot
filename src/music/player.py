@@ -8,7 +8,7 @@ def use_queue(voice, guild):
     if len(guild.queue) > 0:
         next_queue = guild.queue.pop()
         next_track = next_queue["id"]
-        if guild.now_playing["track_id"]:
+        if guild.now_playing["track_id"] and not guild.previous_pressed:
             guild.history.append(guild.now_playing.copy())
         guild.now_playing["title"] = next_queue["title"]
         guild.now_playing["artist"] = next_queue["artist"]

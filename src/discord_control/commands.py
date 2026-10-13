@@ -307,10 +307,14 @@ async def previous(ctx: CommandContext):
         await error_response("No previous track.", guild, ctx.respond, ctx.failure)
         return
 
+    guild.previous_pressed = True
+
     if voice:
         guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist'], "cover_art_url": track['cover_art_url']})
         guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art_url": last_track['cover_art_url']})
         voice.stop()
+
+    guild.previous_pressed = False
 
     await silent_response(ctx.guild_state, ctx.success)
 
