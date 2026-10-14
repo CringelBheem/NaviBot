@@ -5,6 +5,9 @@ from navidrome.api import search_random, get_image
 import requests
 
 def use_queue(voice, guild):
+    if guild.pressed_previous:
+        guild.pressed_previous = False
+        return
     if len(guild.queue) > 0:
         next_queue = guild.queue.pop()
         next_track = next_queue["id"]

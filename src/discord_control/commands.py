@@ -1,7 +1,7 @@
 from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
-from music.player import add_track
+from music.player import add_track, play_now
 from navidrome.api import search_navidrome, search_album, search_random, get_lyrics
 import random
 from discord_control.ui_view import PlayerControls, QueueControls, SearchResult
@@ -307,14 +307,14 @@ async def previous(ctx: CommandContext):
         await error_response("No previous track.", guild, ctx.respond, ctx.failure)
         return
 
-    guild.previous_pressed = True
 
     if voice:
+        guild.pressed_previous = True
         guild.queue.append({"id": track["track_id"], "title": track['title'], "artist": track['artist'], "cover_art_url": track['cover_art_url']})
-        guild.queue.append({"id": last_track["track_id"], "title": last_track['title'], "artist": last_track['artist'], "cover_art_url": last_track['cover_art_url']})
+        guild.now_playing = last_track.copy()
         voice.stop()
+        await play_now(voice, guild, last_track)
 
-    guild.previous_pressed = False
 
     await silent_response(ctx.guild_state, ctx.success)
 
