@@ -58,7 +58,7 @@ async def add_track(voice, respond, guild, track):
             await respond(f"Added: {track['title']} by {track['artist']} to queue. Position: {len(guild.queue)}")
 
 async def play_now(voice, guild, track):
-    track_id = track["id"]
+    track_id = track["track_id"]
     url = build_stream_url(track_id)       
     source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
     voice.play(source, after=lambda e:use_queue(voice, guild))
