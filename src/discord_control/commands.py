@@ -325,7 +325,7 @@ async def previous(ctx: CommandContext):
 
 async def lyrics(ctx: CommandContext):
     guild = ctx.guild_state
-    song = guild.now_playing["id"]
+    song = guild.now_playing["track_id"]
     #get the runtime of song
     #add all lyrics less than that to an embed
     #when time of next line is reached, edit embed with new line
