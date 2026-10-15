@@ -213,7 +213,7 @@ class LyricsResult(discord.ui.View):
         super().__init__(timeout = None)
     
     def build_embed(self, lyrics, guild):
-        current_time = time.time() - guild.start_time = guild.paused_seconds
+        current_time = time.time() - guild.start_time - guild.paused_seconds
         reply = ""
         for i in lyrics:
             if i["start"] < current_time + 1:
