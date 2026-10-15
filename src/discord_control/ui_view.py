@@ -217,7 +217,7 @@ class LyricsResult(discord.ui.View):
         reply = ""
         for i in lyrics:
             if i["start"] < current_time + 2000:
-                reply += i["value"]
+                reply += i["value"] + "\n"
         result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Lyrics:                                 ** ", description=f"{reply}")
         return result_embed
 
