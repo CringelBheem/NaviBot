@@ -164,3 +164,5 @@ def get_lyrics(track_id):
         return data["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]
     except KeyError:
         return []
+
+print(get_lyrics("kLRsIr6lPsnuFhaR41Jfx2"))

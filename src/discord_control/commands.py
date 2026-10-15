@@ -337,4 +337,4 @@ async def lyrics(ctx: CommandContext):
         await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
     else:
         guild.lyric_message = await ctx.send_player_panel(embed=embed, view=guild.lyrics_result)
-    await ctx.respond(song_lyrics)
+    
