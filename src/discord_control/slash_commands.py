@@ -105,9 +105,8 @@ def register(tree):
     async def autoplay_command(interaction: discord.Interaction):
         await previous(create_context(interaction))
     @tree.command(name="lyrics", description=f"Fetches lyrics for a specific track.")
-    @app_commands.autocomplete(query=song_autocomplete)
-    async def get_lyrics(interaction: discord.Interaction, query: str):
-        await lyrics(create_context(interaction), query)
+    async def get_lyrics(interaction: discord.Interaction):
+        await lyrics(create_context(interaction))
     
     
     
