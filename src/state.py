@@ -12,11 +12,17 @@ class GuildState:
         self.history = []
         self.player_message = None
         self.queue_message = None
+        self.lyric_message = None
         self.loop = None
         self.panel_change = False
         self.player_controls = None
         self.queue_controls = None
+        self.lyrics_result = None
         self.pressed_previous = False
+        self.start_time = 0
+        self.pause_start = 0
+        self.paused_seconds = 0
+        self.lyrics = []
 
 guilds = {}
 

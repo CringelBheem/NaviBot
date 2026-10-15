@@ -3,6 +3,7 @@ import discord
 from discord import FFmpegPCMAudio
 from navidrome.api import search_random, get_image
 import requests
+import time
 
 def use_queue(voice, guild):
     if guild.pressed_previous:
@@ -17,6 +18,9 @@ def use_queue(voice, guild):
         guild.now_playing["artist"] = next_queue["artist"]
         guild.now_playing["track_id"] = next_queue["id"]
         guild.now_playing["cover_art_url"]= next_queue['cover_art_url']
+        guild.start_time = time.time()
+        guild.pause_start = 0
+        guild.paused_seconds = 0
         guild.panel_change = True
         url = build_stream_url(next_track)         
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
@@ -48,6 +52,9 @@ async def add_track(voice, respond, guild, track):
         guild.now_playing["artist"] = track['artist']
         guild.now_playing["track_id"] = track_id
         guild.now_playing["cover_art_url"]= get_image(track['coverArt'])
+        guild.start_time = time.time()
+        guild.pause_start = 0
+        guild.paused_seconds = 0
         guild.panel_change = True
         if guild.silent == 0:
             await respond(f"Playing: {track['title']} by {track['artist']}")
@@ -59,6 +66,7 @@ async def add_track(voice, respond, guild, track):
 
 async def play_now(voice, guild, track):
     track_id = track["track_id"]
+    guild.panel_change = True
     url = build_stream_url(track_id)       
     source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
     voice.play(source, after=lambda e:use_queue(voice, guild))

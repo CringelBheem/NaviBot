@@ -1,7 +1,8 @@
 import discord
 from discord.ext import tasks
 from state import guilds
-from discord_control.ui_view import PlayerControls, QueueControls
+from discord_control.ui_view import PlayerControls, QueueControls, LyricsResult
+import time
 
 @tasks.loop(seconds=0.3)
 async def update_panels():
@@ -34,4 +35,15 @@ async def update_panels():
             except discord.errors.NotFound:
                 guild.player_message = None
 
+        if guild.lyric_message:
+            if not guild.lyrics_result:
+                guild.lyrics_result = LyricsResult()
+            lyric_view = guild.lyrics_result
+            lyric_channel = guild.lyric_message.channel
+            try:
+                if guild.lyric_message:
+                    await guild.lyric_message.delete()
+                guild.lyric_message = await lyric_channel.send_player_panel(embed=lyric_view.build_embed(guild.lyrics, guild), view=view)
+            except discord.errors.NotFound:
+                guild.queue_message = None
         guild.panel_change = False

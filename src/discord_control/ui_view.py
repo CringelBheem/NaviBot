@@ -1,6 +1,7 @@
 import discord
 import random
 from state import get_guild
+import time
 
 class PlayerControls(discord.ui.View):
     def __init__(self):
@@ -204,4 +205,21 @@ class SelectMenu(discord.ui.Select):
             ctx.guild_state.silent = 0
         else:
             await play(ctx, search)
+
+
+
+class LyricsResult(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout = None)
     
+    def build_embed(self, lyrics, guild):
+        current_time = time.time() - guild.start_time = guild.paused_seconds
+        reply = ""
+        for i in lyrics:
+            if i["start"] < current_time + 1:
+                reply += i["value"]
+        if reply:
+            result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Lyrics:                                 ** ", description=f"{reply}")
+            return result_embed
+        else:
+            return None

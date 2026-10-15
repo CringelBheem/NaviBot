@@ -4,7 +4,8 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track, play_now
 from navidrome.api import search_navidrome, search_album, search_random, get_lyrics
 import random
-from discord_control.ui_view import PlayerControls, QueueControls, SearchResult
+from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult
+import time
 
 async def join(ctx: CommandContext):
     if not ctx.voice:
@@ -107,8 +108,10 @@ async def pause(ctx: CommandContext):
     if guild.silent == 0:
         await ctx.respond(f"Paused.")
     voice = ctx.voice
-    if voice:
-        voice.pause()
+    if not voice.is_paused():
+        if voice:
+            voice.pause()
+            guild.pause_start = time.time()
     await silent_response(ctx.guild_state, ctx.success)
 
 async def resume(ctx: CommandContext):
@@ -116,8 +119,10 @@ async def resume(ctx: CommandContext):
     if guild.silent == 0:
         await ctx.respond(f"Resuming.")
     voice = ctx.voice
-    if voice:
-        voice.resume()
+    if voice.is_paused():
+        if voice:
+            voice.resume()
+            guild.paused_seconds = time.time() - guild.pause_start
     await silent_response(ctx.guild_state, ctx.success)
 
 async def playing(ctx: CommandContext):
@@ -318,9 +323,18 @@ async def previous(ctx: CommandContext):
 
     await silent_response(ctx.guild_state, ctx.success)
 
-async def lyrics(ctx: CommandContext, song):
+async def lyrics(ctx: CommandContext):
+    guild = ctx.guild_state
+    song = guild.now_playing["id"]
     #get the runtime of song
     #add all lyrics less than that to an embed
     #when time of next line is reached, edit embed with new line
     song_lyrics = get_lyrics(song)
+    guild.lyrics = song_lyrics
+    guild.lyrics_result = LyricsResult()
+    embed = guild.lyrics_result.build_embed(song_lyrics)
+    if not embed:
+        await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
+    else:
+        guild.lyric_message = await ctx.send_player_panel(embed=embed, view=guild.lyrics_result)
     await ctx.respond(song_lyrics)
