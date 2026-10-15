@@ -70,4 +70,8 @@ async def play_now(voice, guild, track):
     url = build_stream_url(track_id)       
     source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
     voice.play(source, after=lambda e:use_queue(voice, guild))
+    guild.start_time = time.time()
+    guild.pause_start = 0
+    guild.paused_seconds = 0
+    guild.panel_change = True
 
