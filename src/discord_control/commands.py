@@ -329,8 +329,9 @@ async def lyrics(ctx: CommandContext):
     #get the runtime of song
     #add all lyrics less than that to an embed
     #when time of next line is reached, edit embed with new line
-    song_lyrics = get_lyrics(song)
-    guild.lyrics = song_lyrics
+    song_lyrics = guild.lyrics
+    if not song_lyrics:
+        await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
     guild.lyrics_result = LyricsResult()
     embed = guild.lyrics_result.build_embed(song_lyrics, guild)
     if not embed:
