@@ -49,6 +49,7 @@ async def update_lyrics():
             if not guild.lyrics_result:
                 guild.lyrics_result = LyricsResult()
             lyric_view = guild.lyrics_result
+            lyric_view.build_embed(guild.lyrics, guild)
             try:
                 await guild.lyric_message.edit(embed=lyric_view.build_embed(guild.lyrics, guild), view=lyric_view)
             except discord.errors.NotFound:
