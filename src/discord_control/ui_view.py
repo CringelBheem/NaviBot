@@ -213,11 +213,19 @@ class LyricsResult(discord.ui.View):
         super().__init__(timeout = None)
     
     def build_embed(self, lyrics, guild):
-        current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
-        reply = ""
-        for i in lyrics:
-            if i["start"] < current_time + 1000:
-                reply += i["value"] + "\n"
+        if not lyrics:
+            reply = "No lyrics available."
+        else:
+            current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
+            reply = ""
+            new_index = 0
+            for i, lyric in enumerate(lyrics):
+                if lyric["start"] < current_time + 1000:
+                    reply += lyric["value"] + "\n"
+                    new_index = i
+            if new_index > guild.current_lyric_index:
+                guild.current_lyric_index = new_index
+                guild.update_lyrics = True
         result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Lyrics:                                 ** ", description=f"{reply}")
         return result_embed
 

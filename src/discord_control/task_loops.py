@@ -40,10 +40,11 @@ async def update_panels():
         guild.panel_change = False
 
 
-@tasks.loop(seconds=2)
+@tasks.loop(seconds=0.2)
 async def update_lyrics():
     for guild in guilds.values():
-
+        if not guild.update_lyrics:
+            continue
         if guild.lyric_message:
             if not guild.lyrics_result:
                 guild.lyrics_result = LyricsResult()
@@ -52,3 +53,5 @@ async def update_lyrics():
                 await guild.lyric_message.edit(embed=lyric_view.build_embed(guild.lyrics, guild), view=lyric_view)
             except discord.errors.NotFound:
                 guild.lyric_message = None
+
+        guild.update_lyrics = False

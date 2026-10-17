@@ -23,6 +23,8 @@ class GuildState:
         self.pause_start = 0
         self.paused_seconds = 0
         self.lyrics = []
+        self.current_lyric_index = 0
+        self.update_lyrics = False
 
 guilds = {}
 
