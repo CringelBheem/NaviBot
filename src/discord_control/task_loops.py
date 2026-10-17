@@ -47,7 +47,7 @@ async def update_lyrics():
             current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
             new_index = 0
             for i, lyric in enumerate(guild.lyrics):
-                if lyric["start"] < current_time + 1000:
+                if lyric["start"] < current_time:
                     new_index = i
                 else:
                     break
