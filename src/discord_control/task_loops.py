@@ -68,4 +68,4 @@ async def update_lyrics():
             except discord.errors.NotFound:
                 guild.lyric_message = None
 
-        guild.update_lyrics = False
+            guild.update_lyrics = False
