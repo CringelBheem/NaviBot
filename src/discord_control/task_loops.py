@@ -40,7 +40,7 @@ async def update_panels():
         guild.panel_change = False
 
 
-@tasks.loop(seconds=0.2)
+@tasks.loop(seconds=1)
 async def update_lyrics():
     for guild in guilds.values():
         if guild.lyric_message:
