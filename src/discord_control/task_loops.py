@@ -40,33 +40,31 @@ async def update_panels():
         guild.panel_change = False
 
 
-@tasks.loop(seconds=1)
+@tasks.loop(seconds=0.2)
 async def update_lyrics():
     for guild in guilds.values():
-        if not guild.lyric_message:
-            continue
+        if guild.lyric_message:
+            current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
+            new_index = 0
+            for i, lyric in enumerate(guild.lyrics):
+                if lyric["start"] < current_time + 1000:
+                    new_index = i
+                else:
+                    break
 
-        current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
-        new_index = 0
-        for i, lyric in enumerate(guild.lyrics):
-            if lyric["start"] < current_time + 1000:
-                new_index = i
-            else:
-                break
+            if new_index > guild.current_lyric_index:
+                guild.current_lyric_index = new_index
+                guild.update_lyrics = True
 
-        if new_index > guild.current_lyric_index:
-            guild.current_lyric_index = new_index
-            guild.update_lyrics = True
+            if not guild.update_lyrics:
+                continue
+            
+            if not guild.lyrics_result:
+                guild.lyrics_result = LyricsResult()
+            lyric_view = guild.lyrics_result
+            try:
+                await guild.lyric_message.edit(embed=lyric_view.build_embed(guild.lyrics, guild), view=lyric_view)
+            except discord.errors.NotFound:
+                guild.lyric_message = None
 
-        #if not guild.update_lyrics:
-        #    continue
-        
-        if not guild.lyrics_result:
-            guild.lyrics_result = LyricsResult()
-        lyric_view = guild.lyrics_result
-        try:
-            await guild.lyric_message.edit(embed=lyric_view.build_embed(guild.lyrics, guild), view=lyric_view)
-        except discord.errors.NotFound:
-            guild.lyric_message = None
-
-        guild.update_lyrics = False
+            guild.update_lyrics = False

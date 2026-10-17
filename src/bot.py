@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from discord_control.responses import *
 from discord_control.slash_commands import register
 from discord_control.prefix_commands import handle_prefix
-from discord_control.task_loops import update_panels
+from discord_control.task_loops import update_panels, update_lyrics
 
 load_dotenv()
 
@@ -21,6 +21,7 @@ class MyClient(discord.Client):
     async def setup_hook(self):
         register(self.tree)
         update_panels.start()
+        update_lyrics.start()
         await self.tree.sync()
 
     async def on_ready(self):
