@@ -165,4 +165,5 @@ def get_lyrics(track_id):
     except KeyError:
         return []
 
-#print(get_lyrics("kLRsIr6lPsnuFhaR41Jfx2"))
+#print(search_navidrome("", "search2"))
+#print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))
