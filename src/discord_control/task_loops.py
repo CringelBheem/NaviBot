@@ -44,8 +44,7 @@ async def update_panels():
 async def update_lyrics():
     for guild in guilds.values():
         if guild.lyric_message:
-            voice = guild.voice
-            if voice and voice.is_paused():
+            if guild.pause_start != 0:
                 current_time = (guild.pause_start - guild.start_time - guild.paused_seconds) * 1000
             else:
                 current_time = (time.time() - guild.start_time - guild.paused_seconds) * 1000
