@@ -122,7 +122,7 @@ async def resume(ctx: CommandContext):
     if voice.is_paused():
         if voice:
             voice.resume()
-            guild.paused_seconds = time.time() - guild.pause_start
+            guild.paused_seconds += time.time() - guild.pause_start
     await silent_response(ctx.guild_state, ctx.success)
 
 async def playing(ctx: CommandContext):
