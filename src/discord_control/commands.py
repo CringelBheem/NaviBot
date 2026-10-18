@@ -335,7 +335,7 @@ async def lyrics(ctx: CommandContext):
         await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
         return"""
     if guild.lyric_message:
-        await guild.lyric_message.delete()
+        guild.lyric_message = None
     guild.lyrics_result = LyricsResult()
     embed = guild.lyrics_result.build_embed(song_lyrics, guild)
     if not embed:

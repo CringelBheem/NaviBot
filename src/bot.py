@@ -39,6 +39,4 @@ client.run(os.getenv("DISCORD_BOT_TOKEN"))
 !albuminfo -> Api call, possibly not useful.
 !artistinfo -> Same as album info.
 !help -> Returns an embedded message with each command.
-Fix paused time so it add to a total, only reset when the song is over.
-Fix non-synced lyrics returns so they still work.
 """
