@@ -107,6 +107,9 @@ def register(tree):
     @tree.command(name="lyrics", description=f"Fetches lyrics for a specific track.")
     async def get_lyrics(interaction: discord.Interaction):
         await lyrics(create_context(interaction))
+    @tree.command(name="help", description=f"Brings up command help.")
+    async def get_help(interaction: discord.Interaction):
+        await help(create_context(interaction))
     
     
     

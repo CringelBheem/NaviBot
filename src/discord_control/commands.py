@@ -4,7 +4,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track, play_now
 from navidrome.api import search_navidrome, search_album, search_random, get_lyrics
 import random
-from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult
+from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult
 import time
 
 async def join(ctx: CommandContext):
@@ -342,4 +342,14 @@ async def lyrics(ctx: CommandContext):
         await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
     else:
         guild.lyric_message = await ctx.send_player_panel(embed=embed, view=guild.lyrics_result)
+
+async def help(ctx: CommandContext):
+    guild = ctx.guild_state
+    view = HelpResult()
+    embed = view.build_embed()
+    if not embed:
+        await error_response("A problem has occurred while fetching help.", guild, ctx.respond, ctx.failure)
+    else:
+        await ctx.send_player_panel(embed=embed, view=view)
+
     

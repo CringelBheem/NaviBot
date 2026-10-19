@@ -16,7 +16,8 @@ USER_COMMANDS = {
     "!shufflequeue": shuffle_queue,
     "!autoplay": autoplay,
     "!previous": previous,
-    "!lyrics": lyrics
+    "!lyrics": lyrics,
+    "!help": help
 }
 
 PARAM_COMMANDS = {

@@ -223,3 +223,18 @@ class LyricsResult(discord.ui.View):
         result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Lyrics:                                 ** ", description=f"{reply}")
         return result_embed
 
+
+
+class HelpResult(discord.ui.view):
+    def __init__(self):
+        super().__init__(timeout = None)
+
+    def build_embed(self):
+        embed = discord.Embed(colour=0xdc8e10,title="**                                  Navi-Bot Commands:                                 ** ", description="Commands can be used with both / and ! prefixes.")
+        embed.add_field(name="Voice Connection Commands:", value="/join: Makes the bot join the current voice channel.\n/leave: Makes the bot leave the current voice channel.\n", inline=False)
+        embed.add_field(name="Search Commands:", value="/search [query]: Returns search results for a specified query.\n/play [query]: Plays or queues the queried song.\n/playalbum [query]: Plays and queues all tracks in the queried album.\n/playrandom [number]: Searches and queues a specified number of random tracks.\n/playrandomalbum: Plays and queues a random album.\n", inline=False)
+        embed.add_field(name="Playback Commands:", value="/playing: Shows the current track playing and opens the player.\n/skip: Skips the current track.\n/stop: Stops all queued tracks.\n/pause: Pauses the current track.\n/resume: Resumes the current track.\n/previous: Plays the previous track.\n", inline=False)
+        embed.add_field(name="Queue Commands:", value="/queue: Shows the queue and opens queue controls.\n/shufflequeue: Shuffles the queue.\n/clearqueue: Clears the queue.\n/remove [queue position]: Removes a track at the specified position in the queue.\n", inline=False)
+        embed.add_field(name="Lyrics Commands:", value="/lyrics: Shows the lyrics for the current track.\n", inline=False)
+        embed.add_field(name="Mode Commands:", value=" /silent: Activates silent mode to reduce spam.\n/autoplay: Activates autoplay, autmatically queuing random tracks if queue is empty.\n", inline=False)
+        return embed
