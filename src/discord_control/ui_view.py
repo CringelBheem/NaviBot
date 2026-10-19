@@ -225,7 +225,7 @@ class LyricsResult(discord.ui.View):
 
 
 
-class HelpResult(discord.ui.view):
+class HelpResult(discord.ui.View):
     def __init__(self):
         super().__init__(timeout = None)
 
