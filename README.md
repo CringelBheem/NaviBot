@@ -1,35 +1,57 @@
 # NaviBot
 NaviBot is an open-source music player bot for discord that streams your navidrome music collection.
 
+# Features
+
+# Screenshots
+
 # Installation
 
+#                                  Commands:                             
+Commands can be used with both / and ! prefixes. 
+# Voice Connection Commands:
+| Command  | Description                     |
+| -------- | ------------------------------- |
+| `/join`  | Join your current voice channel |
+| `/leave` | Leave the voice channel         |
 
+# Search Commands:
+| Command               | Description           |
+| --------------------- | --------------------- |
+| `/search <query>`     | Search for tracks     |
+| `/play <query>`       | Play or queue a song  |
+| `/playalbum <query>`  | Queue an entire album |
+| `/playrandom <count>` | Queue random tracks   |
+| `/playrandomalbum`    | Play a random album   |
 
-#                                  Commands:                                 
-Commands can be used with both / and ! prefixes.
-Voice Connection Commands:
-/join: Makes the bot join the current voice channel.
-/leave: Makes the bot leave the current voice channel.
-Search Commands:
-/search [query]: Returns search results for a specified query.
-/play [query]: Plays or queues the queried song.
-/playalbum [query]: Plays and queues all tracks in the queried album.
-/playrandom [number]: Searches and queues a specified number of random tracks.
-/playrandomalbum: Plays and queues a random album.
-Playback Commands:
-/playing: Shows the current track playing and opens the player.
-/skip: Skips the current track.
-/stop: Stops all queued tracks.
-/pause: Pauses the current track.
-/resume: Resumes the current track.
-/previous: Plays the previous track.
-Queue Commands:
-/queue: Shows the queue and opens queue controls.
-/shufflequeue: Shuffles the queue.
-/clearqueue: Clears the queue.
-/remove [queue position]: Removes a track at the specified position in the queue.
-Lyrics Commands:
-/lyrics: Shows the lyrics for the current track.
-Mode Commands:
-/silent: Activates silent mode to reduce spam.
-/autoplay: Activates autoplay, autmatically queuing random tracks if queue is empty.
+# Playback Commands:
+| Command     | Description                   |
+| ----------- | ----------------------------- |
+| `/playing`  | Show current track            |
+| `/skip`     | Skip current track            |
+| `/stop`     | Clear queue and stop playback |
+| `/pause`    | Pause playback                |
+| `/resume`   | Resume playback               |
+| `/previous` | Play the previous track       |
+
+# Queue Commands:
+| Command              | Description       |
+| -------------------- | ----------------- |
+| `/queue`             | Show the queue    |
+| `/shufflequeue`      | Shuffle the queue |
+| `/clearqueue`        | Clear the queue   |
+| `/remove <position>` | Remove a track    |
+
+# Lyrics Commands:
+| Command   | Description                 |
+| --------- | --------------------------- |
+| `/lyrics` | Display synchronized lyrics |
+
+# Mode Commands:
+| Command     | Description                       |
+| ----------- | --------------------------------- |
+| `/silent`   | Reduce message spam               |
+| `/autoplay` | Automatically queue random tracks |
+
+# About this project
+
