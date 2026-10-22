@@ -1,3 +1,7 @@
+![Python](https://img.shields.io/badge/python-3.11+-blue)
+![GitHub Stars](https://img.shields.io/github/stars/CringelBheem/navibot)
+
+
 # NaviBot
 NaviBot is an open-source music player bot for discord that streams your navidrome music collection.
 
@@ -29,6 +33,9 @@ NaviBot is an open-source music player bot for discord that streams your navidro
 - Navidrome Server
 - Discord Bot Token
 ### Setup
+In order to host this bot for yourself, you first need to create a bot application using [Discord's Developer Portal](https://discord.com/developers/home).
+
+You also need to host your music using Navidrome or have access to a Navidrome user account.
 
 ## Commands
 Commands can be used with both / and ! prefixes. 
@@ -78,3 +85,11 @@ Commands can be used with both / and ! prefixes.
 
 # About this project
 
+
+# Contributing
+
+Pull requests are welcome.
+- Fork the repository and clone it
+- Create your feature branch
+- Commit your changes
+- Open a pull request
