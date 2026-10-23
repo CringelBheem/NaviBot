@@ -2,7 +2,7 @@ from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track, play_now
-from navidrome.api import search_navidrome, search_album, search_random, get_lyrics
+from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist
 import random
 from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult
 import time
@@ -352,4 +352,11 @@ async def help(ctx: CommandContext):
     else:
         await ctx.send_player_panel(embed=embed, view=view)
 
-    
+async def add_playlist(ctx: CommandContext, name):
+    guild = ctx.guild_state
+    id = create_playlist(name)
+    if id:
+        if guild.silent == 0:
+            await ctx.respond(f"Created playlist: {name}\nId: {id}")
+        else:
+            silent_response(guild, ctx.success)

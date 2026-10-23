@@ -165,5 +165,48 @@ def get_lyrics(track_id):
     except KeyError:
         return []
 
+def create_playlist(name):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/createPlaylist"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+    params = {
+            "name": name,
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    r = requests.get(url, params=params)
+    data = r.json()
+    try:
+        return data["subsonic-response"]["playlist"]["id"]
+    except KeyError:
+        return []
+
+def add_to_playlist(id, song_id):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/createPlaylist"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+    params = {
+            "id": id,
+            "songIdToAdd": song_id,
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    r = requests.get(url, params=params)
+    data = r.json()
+    try:
+        return data["subsonic-response"]["playlist"]["id"]
+    except KeyError:
+        return []
+
+
+
 #print(search_navidrome("", "search2"))
 #print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))

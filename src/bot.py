@@ -35,8 +35,8 @@ client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 
 """
-!lyrics -> Run time and lyric array syncing needed.
-!albuminfo -> Api call, possibly not useful.
-!artistinfo -> Same as album info.
-!help -> Returns an embedded message with each command.
+!playlist?
+Move queue items
+Refine search controls
+Progress bar
 """

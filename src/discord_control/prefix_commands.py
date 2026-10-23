@@ -25,6 +25,7 @@ PARAM_COMMANDS = {
     "!search": search,
     #"!parrot": parrot,
     "!playalbum": play_album,
+    "!createplaylist": add_playlist,
     #"!playrandom": play_random,
     #"!remove": remove_item
 }
