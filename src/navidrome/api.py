@@ -202,7 +202,7 @@ def add_to_playlist(id, song_id):
     r = requests.get(url, params=params)
     data = r.json()
     try:
-        return data["subsonic-response"]["playlist"]["id"]
+        return data["subsonic-response"]["status"]
     except KeyError:
         return []
 
