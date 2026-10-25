@@ -237,5 +237,5 @@ class HelpResult(discord.ui.View):
         embed.add_field(name="Queue Commands:", value="/queue: Shows the queue and opens queue controls.\n/shufflequeue: Shuffles the queue.\n/clearqueue: Clears the queue.\n/remove [queue position]: Removes a track at the specified position in the queue.\n", inline=False)
         embed.add_field(name="Lyrics Commands:", value="/lyrics: Shows the lyrics for the current track.\n", inline=False)
         embed.add_field(name="Mode Commands:", value=" /silent: Activates silent mode to reduce spam.\n/autoplay: Activates autoplay, autmatically queuing random tracks if queue is empty.\n", inline=False)
-        embed.add_field(name="Playlist Commands:", value=" /createplaylist [name]: Creates a playlist with of the specified name.\n/autoplay: Activates autoplay, autmatically queuing random tracks if queue is empty.\n", inline=False)
+        embed.add_field(name="Playlist Commands:", value=" /createplaylist [name]: Creates a playlist with of the specified name.\n", inline=False)
         return embed
