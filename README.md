@@ -3,8 +3,7 @@
 
 
 # NaviBot
-NaviBot is an open-source music player bot for discord that streams your navidrome music collection.
-
+NaviBot is an open-source Discord music bot built for Navidrome. Stream your self-hosted music library with full search, queue controls, synced lyrics support, autoplay, album playback, and an interactive Discord UI all in your discord voice channels.
 
 ## Features
 
@@ -15,6 +14,7 @@ NaviBot is an open-source music player bot for discord that streams your navidro
 - Live synchronized lyrics
 - Autoplay
 - Silent mode to reduce spam
+- Navidrome playlist controls
 
 ## Screenshots
 
@@ -82,6 +82,12 @@ Commands can be used with both / and ! prefixes.
 | ----------- | --------------------------------- |
 | `/silent`   | Reduce message spam               |
 | `/autoplay` | Automatically queue random tracks |
+
+### Playlist Commands:
+| Command                 | Description      |
+| ----------------------- | ---------------- |
+| `/createplaylist <name>`| Create a playlist|
+
 
 # About this project
 
