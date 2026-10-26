@@ -110,9 +110,12 @@ def register(tree):
     @tree.command(name="help", description=f"Brings up command help.")
     async def get_help(interaction: discord.Interaction):
         await help(create_context(interaction))
-    @tree.command(name="createplaylist", description=f"Creates a playlist with specified name.")
+    @tree.command(name="create_playlist", description=f"Creates a playlist with specified name.")
     async def create_playlist(interaction: discord.Interaction, name: str):
         await add_playlist(create_context(interaction), name)
+    @tree.command(name="add_to_playlist", description=f"Adds a track to a specified playlist.")
+    async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
+        await add_track_to_playlist(create_context(interaction), playlist, track)
     
     
     

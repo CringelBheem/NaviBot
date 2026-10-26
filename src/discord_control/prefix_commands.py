@@ -11,9 +11,9 @@ USER_COMMANDS = {
     "!playing": playing,
     "!queue": queue,
     "!silent": silent,
-    "!playrandomalbum": play_random_album,
-    "!clearqueue": clear_queue,
-    "!shufflequeue": shuffle_queue,
+    "!play_random_album": play_random_album,
+    "!clear_queue": clear_queue,
+    "!shuffle": shuffle_queue,
     "!autoplay": autoplay,
     "!previous": previous,
     "!lyrics": lyrics,
@@ -24,8 +24,8 @@ PARAM_COMMANDS = {
     "!play": play,
     "!search": search,
     #"!parrot": parrot,
-    "!playalbum": play_album,
-    "!createplaylist": add_playlist,
+    "!play_album": play_album,
+    "!create_playlist": add_playlist,
     #"!playrandom": play_random,
     #"!remove": remove_item
 }
@@ -54,12 +54,21 @@ async def handle_prefix(self, message):
             await error_response("No results found.", get_guild(message.guild.id), message.channel.send, failure)
             return
         await PARAM_COMMANDS[command](ctx, query)
-    elif command == "!playrandom":
+    elif command == "!play_random":
         try:
             size = int(message.content.split(" ", 1)[1])
         except (IndexError, ValueError):
             size = None
         await play_random(ctx, size)
+    elif command == "!add_to_playlist":
+        try:
+            split = (message.content.split(" ", 1))
+            playlist = split[1]
+            track = split[2]
+        except (IndexError, ValueError):
+            await error_response("No valid playlist or track.", get_guild(message.guild.id), message.channel.send, failure)
+            return
+        await add_track_to_playlist(ctx, playlist, track)
     elif command == "!remove":
         try:
             queue_ind = int(message.content.split(" ", 1)[1])
