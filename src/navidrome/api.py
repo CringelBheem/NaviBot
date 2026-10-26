@@ -206,6 +206,28 @@ def add_to_playlist(id, song_id):
     except KeyError:
         return []
 
+def get_playlist_id(name):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/getPlaylists"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+    params = {
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    r = requests.get(url, params=params)
+    data = r.json()
+    try:
+        playlists = data["subsonic-response"]["playlists"]["playlist"]
+        for playlist in playlists:
+            if playlist["name"] == name:
+                return playlist["id"]
+    except KeyError:
+        return []
+
 
 
 #print(search_navidrome("", "search2"))
