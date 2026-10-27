@@ -186,7 +186,7 @@ def create_playlist(name):
         return []
 
 def add_to_playlist(id, song_id):
-    url = os.getenv("NAVIDROME_URL")+f"/rest/createPlaylist"
+    url = os.getenv("NAVIDROME_URL")+f"/rest/updatePlaylist"
 
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
