@@ -190,7 +190,7 @@ def add_to_playlist(id, song_id):
 
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
-            "id": id,
+            "playlistId": id,
             "songIdToAdd": song_id,
             "u": "CringelBot",
             "t": token,
@@ -202,7 +202,7 @@ def add_to_playlist(id, song_id):
     r = requests.get(url, params=params)
     data = r.json()
     try:
-        return data["subsonic-response"]["status"]
+        return data["subsonic-response"]
     except KeyError:
         return []
 
