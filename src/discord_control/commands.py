@@ -359,13 +359,13 @@ async def add_playlist(ctx: CommandContext, name):
         if guild.silent == 0:
             await ctx.respond(f"Created playlist: {name}\nId: {id}")
         else:
-            silent_response(guild, ctx.success)
+            await silent_response(guild, ctx.success)
 
 async def add_track_to_playlist(ctx: CommandContext, playlist, track):
     guild = ctx.guild_state
     id = get_playlist_id(playlist)
     if not id:
-        error_response("No playlist found.", guild, ctx.respond, ctx.failure)
+        await error_response("No playlist found.", guild, ctx.respond, ctx.failure)
         return
     results = search_navidrome(track, "search2")
     songs = results.get("song", [])
@@ -373,9 +373,9 @@ async def add_track_to_playlist(ctx: CommandContext, playlist, track):
     status = add_to_playlist(id, track_id)
     if status:
         if guild.silent == 0:
-            await ctx.respond(f"Added {track} to playlist.")
+            await ctx.respond(f"Added {track} to {playlist}.")
         else:
-            silent_response(guild, ctx.success)
+            await silent_response(guild, ctx.success)
     else:
-        error_response("No tracks found.", guild, ctx.respond, ctx.failure)
+        await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
         return
