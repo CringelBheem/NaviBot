@@ -374,10 +374,9 @@ async def add_track_to_playlist(ctx: CommandContext, playlist, track):
         return
     track_id = songs[0]["id"]
     status = add_to_playlist(id, track_id)
-    if status:
+    if status == "ok":
         if guild.silent == 0:
             await ctx.respond(f"Added {track} to {playlist}.")
-            await ctx.respond(f"Status: {status} Song: {songs[0]}.")
         else:
             await silent_response(guild, ctx.success)
     else:
