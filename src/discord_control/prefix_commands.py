@@ -62,7 +62,7 @@ async def handle_prefix(self, message):
         await play_random(ctx, size)
     elif command == "!add_to_playlist":
         try:
-            split = (message.content.split(" ", 1))
+            split = (message.content.split(" ", 2))
             playlist = split[1]
             track = split[2]
         except (IndexError, ValueError):

@@ -223,7 +223,7 @@ def get_playlist_id(name):
     try:
         playlists = data["subsonic-response"]["playlists"]["playlist"]
         for playlist in playlists:
-            if playlist["name"] == name:
+            if playlist["name"].lower() == name.lower():
                 return playlist["id"]
     except KeyError:
         return []
