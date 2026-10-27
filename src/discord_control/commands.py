@@ -369,6 +369,8 @@ async def add_track_to_playlist(ctx: CommandContext, playlist, track):
         return
     results = search_navidrome(track, "search2")
     songs = results.get("song", [])
+    if not songs:
+        await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
     track_id = songs[0]["id"]
     status = add_to_playlist(id, track_id)
     if status == "ok":

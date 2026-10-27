@@ -226,7 +226,7 @@ def get_playlist_id(name):
             if playlist["name"].lower() == name.lower():
                 return playlist["id"]
     except KeyError:
-        return []
+        return None
 
 
 
