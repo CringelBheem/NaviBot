@@ -2,7 +2,7 @@ from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track, play_now
-from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id
+from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist
 import random
 from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult
 import time
@@ -382,3 +382,16 @@ async def add_track_to_playlist(ctx: CommandContext, playlist, track):
     else:
         await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
         return
+
+async def search_playlist(ctx: CommandContext, playlist):
+    guild = ctx.guild_state
+    id = get_playlist_id(playlist)
+    results = get_playlist(id)
+    songs = [s["title"] for s in results.get("song", [])]
+    songs_ids = [s["id"] for s in results.get("song", [])]
+    view = SearchResult(results, songs_ids)
+    embed = view.build_embed(guild, [], [], songs)
+    if not embed:
+        await error_response("No results found.", guild, ctx.respond, ctx.failure)
+    else:
+        await ctx.send_player_panel(embed=embed, view=view)

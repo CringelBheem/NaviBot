@@ -116,6 +116,9 @@ def register(tree):
     @tree.command(name="add_to_playlist", description=f"Adds a track to a specified playlist.")
     async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
         await add_track_to_playlist(create_context(interaction), playlist, track)
+    @tree.command(name="search_playlist", description=f"Searches tracks in a specified playlist.")
+    async def get_search_playlist(interaction: discord.Interaction, playlist: str):
+        await search_playlist(create_context(interaction), playlist)
     
     
     
