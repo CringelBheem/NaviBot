@@ -387,8 +387,11 @@ async def search_playlist(ctx: CommandContext, playlist):
     guild = ctx.guild_state
     id = get_playlist_id(playlist)
     results = get_playlist(id)
-    songs = [s["title"] for s in results.get("song", [])]
-    songs_ids = [s["id"] for s in results.get("song", [])]
+    if not results:
+        await error_response("No playlist found.", guild, ctx.respond, ctx.failure)
+        return
+    songs = [s["title"] for s in results]
+    songs_ids = [s["id"] for s in results]
     view = SearchResult(results, songs_ids)
     embed = view.build_embed(guild, [], [], songs)
     if not embed:
