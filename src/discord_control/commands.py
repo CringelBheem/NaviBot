@@ -398,3 +398,26 @@ async def search_playlist(ctx: CommandContext, playlist):
         await error_response("No results found.", guild, ctx.respond, ctx.failure)
     else:
         await ctx.send_player_panel(embed=embed, view=view)
+
+
+async def play_playlist(ctx: CommandContext, playlist):
+    guild = ctx.guild_state
+    id = get_playlist_id(playlist)
+    songs = get_playlist(id)
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
+
+    if not voice:
+        return
+    
+    #songs = [s["title"] for s in results]
+
+    if not songs:
+        await error_response("No playlists found.", guild, ctx.respond, ctx.failure)
+        return
+    
+    for track in songs:
+        await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)
