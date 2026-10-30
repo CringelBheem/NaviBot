@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord_control.commands import *
-from navidrome.api import search_navidrome
+from navidrome.api import search_navidrome, get_playlists
 import asyncio
 
 def create_context(interaction: discord.Interaction):
@@ -41,7 +41,11 @@ async def album_autocomplete(interaction: discord.Interaction, search: str):
         app_commands.Choice(name=f"{album['title']} - {album['artist']}"[:100], value=album['title']) for album in albums[:25]
     ]
     
-
+async def playlist_autocomplete(interaction: discord.Interaction, search: str):
+    results = get_playlists(search)
+    return [
+        app_commands.Choice(name=f"{playlist['name']}"[:100], value=playlist['name']) for playlist in results[:25]
+    ]
 
 def register(tree):
     @tree.command(name="join", description=f"Makes the bot join the current voice channel.")
@@ -114,12 +118,15 @@ def register(tree):
     async def create_playlist(interaction: discord.Interaction, name: str):
         await add_playlist(create_context(interaction), name)
     @tree.command(name="add_to_playlist", description=f"Adds a track to a specified playlist.")
+    @app_commands.autocomplete(playlist=playlist_autocomplete, track=song_autocomplete)
     async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
         await add_track_to_playlist(create_context(interaction), playlist, track)
     @tree.command(name="search_playlist", description=f"Searches tracks in a specified playlist.")
+    @app_commands.autocomplete(playlist=playlist_autocomplete)
     async def get_search_playlist(interaction: discord.Interaction, playlist: str):
         await search_playlist(create_context(interaction), playlist)
     @tree.command(name="play_playlist", description=f"Plays all tracks in a specified playlist.")
+    @app_commands.autocomplete(playlist=playlist_autocomplete)
     async def get_play_playlist(interaction: discord.Interaction, playlist: str):
         await play_playlist(create_context(interaction), playlist)
     

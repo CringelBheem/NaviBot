@@ -248,6 +248,25 @@ def get_playlist(id):
     except KeyError:
         return None
 
+def get_playlists(name):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/getPlaylists"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+    params = {
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    r = requests.get(url, params=params)
+    data = r.json()
+    try:
+        return data["subsonic-response"]["playlists"]["playlist"]
+    except KeyError:
+        return None
+
 
 #print(search_navidrome("", "search2"))
 #print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))
