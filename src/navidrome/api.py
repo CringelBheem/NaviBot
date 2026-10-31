@@ -267,6 +267,27 @@ def get_playlists(name):
     except KeyError:
         return None
 
+def remove_from_playlist(id, index):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/updatePlaylist"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+    params = {
+            "playlistId": id,
+            "songIndexToRemove": index + 1,
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+    r = requests.get(url, params=params)
+    data = r.json()
+    try:
+        return data["subsonic-response"]["status"]
+    except KeyError:
+        return []
+
 
 #print(search_navidrome("", "search2"))
 #print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))
