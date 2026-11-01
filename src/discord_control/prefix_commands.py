@@ -71,6 +71,15 @@ async def handle_prefix(self, message):
             await error_response("No valid playlist or track.", get_guild(message.guild.id), message.channel.send, failure)
             return
         await add_track_to_playlist(ctx, playlist, track)
+    elif command == "!remove_from_playlist":
+            try:
+                split = (message.content.split(" ", 2))
+                playlist = split[1]
+                position = int(split[2])
+            except (IndexError, ValueError):
+                await error_response("No valid playlist or position.", get_guild(message.guild.id), message.channel.send, failure)
+                return
+            await remove_track_from_playlist(ctx, playlist, track)
     elif command == "!remove":
         try:
             queue_ind = int(message.content.split(" ", 1)[1])

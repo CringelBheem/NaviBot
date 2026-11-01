@@ -2,7 +2,7 @@ from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track, play_now
-from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist
+from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist, remove_from_playlist
 import random
 from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult
 import time
@@ -421,3 +421,20 @@ async def play_playlist(ctx: CommandContext, playlist):
     for track in songs:
         await add_track(voice, ctx.respond, guild, track)
     await silent_response(ctx.guild_state, ctx.success)
+
+async def remove_track_from_playlist(ctx: CommandContext, playlist, position):
+    guild = ctx.guild_state
+    id = get_playlist_id(playlist)
+    if not id:
+        await error_response("No playlist found.", guild, ctx.respond, ctx.failure)
+        return
+
+    status = remove_from_playlist(id, position)
+    if status == "ok":
+        if guild.silent == 0:
+            await ctx.respond(f"Removed from {playlist}.")
+        else:
+            await silent_response(guild, ctx.success)
+    else:
+        await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
+        return

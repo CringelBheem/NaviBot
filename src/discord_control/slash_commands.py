@@ -129,6 +129,10 @@ def register(tree):
     @app_commands.autocomplete(playlist=playlist_autocomplete)
     async def get_play_playlist(interaction: discord.Interaction, playlist: str):
         await play_playlist(create_context(interaction), playlist)
+    @tree.command(name="remove_from_playlist", description=f"Removes a track within a specified playlist.")
+    @app_commands.autocomplete(playlist=playlist_autocomplete)
+    async def add_to_playlist(interaction: discord.Interaction, playlist: str, position: int):
+        await remove_track_from_playlist(create_context(interaction), playlist, position)
     
     
     
