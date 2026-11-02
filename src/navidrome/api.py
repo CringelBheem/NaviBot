@@ -273,7 +273,7 @@ def remove_from_playlist(id, index):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
             "playlistId": id,
-            "songIndexToRemove": index + 1,
+            "songIndexToRemove": index - 1,
             "u": "CringelBot",
             "t": token,
             "s": salt,
