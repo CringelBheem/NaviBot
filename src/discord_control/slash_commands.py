@@ -47,6 +47,15 @@ async def playlist_autocomplete(interaction: discord.Interaction, search: str):
         app_commands.Choice(name=f"{playlist['name']}"[:100], value=playlist['name']) for playlist in results[:25]
     ]
 
+async def playlist_song_autocomplete(interaction: discord.Interaction, search: str):
+    playlist = interaction.namespace.playlist
+    if not playlist:
+        return []
+    results = get_playlist(search)
+    return [
+        app_commands.Choice(name=f"{song['title']} - {song['artist']}"[:100], value=song['title']) for song in results[:25]
+    ]
+
 def register(tree):
     @tree.command(name="join", description=f"Makes the bot join the current voice channel.")
     async def join_command(interaction: discord.Interaction):
@@ -130,9 +139,9 @@ def register(tree):
     async def get_play_playlist(interaction: discord.Interaction, playlist: str):
         await play_playlist(create_context(interaction), playlist)
     @tree.command(name="remove_from_playlist", description=f"Removes a track within a specified playlist.")
-    @app_commands.autocomplete(playlist=playlist_autocomplete)
-    async def add_to_playlist(interaction: discord.Interaction, playlist: str, position: int):
-        await remove_track_from_playlist(create_context(interaction), playlist, position)
+    @app_commands.autocomplete(playlist=playlist_autocomplete, track=playlist_song_autocomplete)
+    async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
+        await remove_track_from_playlist(create_context(interaction), playlist, track)
     
     
     

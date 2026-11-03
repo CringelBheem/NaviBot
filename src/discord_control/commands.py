@@ -422,13 +422,30 @@ async def play_playlist(ctx: CommandContext, playlist):
         await add_track(voice, ctx.respond, guild, track)
     await silent_response(ctx.guild_state, ctx.success)
 
-async def remove_track_from_playlist(ctx: CommandContext, playlist, position):
+async def remove_track_from_playlist(ctx: CommandContext, playlist, track):
+    position = None
     guild = ctx.guild_state
     id = get_playlist_id(playlist)
     if not id:
         await error_response("No playlist found.", guild, ctx.respond, ctx.failure)
         return
+    
+    results = get_playlist(id)
 
+    if not results:
+        await error_response("No playlist found.", guild, ctx.respond, ctx.failure)
+        return
+    
+    songs = [s["title"] for s in results]
+
+    for i, song in enumerate(songs):
+        if song == track:
+            position = i
+
+    if not position:
+        await error_response("No track found.", guild, ctx.respond, ctx.failure)
+        return
+    
     status = remove_from_playlist(id, position)
     if status == "ok":
         if guild.silent == 0:

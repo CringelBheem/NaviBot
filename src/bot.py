@@ -35,7 +35,6 @@ client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 
 """
-!playlist?
 Move queue items
 Refine search controls
 Progress bar
