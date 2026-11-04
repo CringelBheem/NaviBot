@@ -442,7 +442,7 @@ async def remove_track_from_playlist(ctx: CommandContext, playlist, track):
         if song == track:
             position = i
 
-    if not position:
+    if position is None:
         await error_response("No track found.", guild, ctx.respond, ctx.failure)
         return
     

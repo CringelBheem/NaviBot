@@ -51,10 +51,15 @@ async def playlist_song_autocomplete(interaction: discord.Interaction, search: s
     playlist = interaction.namespace.playlist
     if not playlist:
         return []
-    results = get_playlist(search)
-    return [
-        app_commands.Choice(name=f"{song['title']} - {song['artist']}"[:100], value=song['title']) for song in results[:25]
-    ]
+    id = get_playlist_id(playlist)
+    if id:
+        results = get_playlist(id)
+        if results:
+            return [
+                app_commands.Choice(name=f"{song['title']} - {song['artist']}"[:100], value=song['title']) for song in results[:25]
+            ]
+    else:
+        return []
 
 def register(tree):
     @tree.command(name="join", description=f"Makes the bot join the current voice channel.")
