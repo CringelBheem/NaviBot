@@ -27,7 +27,8 @@ PARAM_COMMANDS = {
     "!play_album": play_album,
     "!create_playlist": add_playlist,
     "!search_playlist": search_playlist,
-    "!play_playlist": play_playlist
+    "!play_playlist": play_playlist,
+    "!move_up": move_up
     #"!playrandom": play_random,
     #"!remove": remove_item
 }
