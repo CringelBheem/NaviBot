@@ -151,5 +151,7 @@ def register(tree):
     @app_commands.autocomplete(track=song_autocomplete)
     async def up_command(interaction: discord.Interaction, track: str):
         await move_up(create_context(interaction), track)    
-    
-    
+    @tree.command(name="move_down", description=f"Moves a track down in the queue.")
+    @app_commands.autocomplete(track=song_autocomplete)
+    async def up_command(interaction: discord.Interaction, track: str):
+        await move_down(create_context(interaction), track)    

@@ -466,13 +466,34 @@ async def move_up(ctx: CommandContext, track):
     if pos is None:
         await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
         return
-    if pos - 1 >= 0:
+    if pos + 1 <= len(guild.queue):
         des_track = guild.queue.pop(pos)
-        guild.queue.insert(pos-1, des_track)
+        guild.queue.insert(pos+1, des_track)
         if guild.silent == 0:
             await ctx.respond(f"Moved {track} up in the queue.")
         else:
             await silent_response(guild, ctx.success)
     else:
         await error_response("Track already at the top of the queue.", guild, ctx.respond, ctx.failure)
+        return
+
+async def move_down(ctx: CommandContext, track):
+    guild = ctx.guild_state
+    pos = None
+    for i, listing in enumerate(guild.queue):
+        if listing["title"] == track:
+            pos = i
+            break
+    if pos is None:
+        await error_response("No tracks found.", guild, ctx.respond, ctx.failure)
+        return
+    if pos - 1 >= 0:
+        des_track = guild.queue.pop(pos)
+        guild.queue.insert(pos-1, des_track)
+        if guild.silent == 0:
+            await ctx.respond(f"Moved {track} down in the queue.")
+        else:
+            await silent_response(guild, ctx.success)
+    else:
+        await error_response("Track already at the bottom of the queue.", guild, ctx.respond, ctx.failure)
         return
