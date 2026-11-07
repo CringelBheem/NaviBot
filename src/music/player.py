@@ -27,6 +27,8 @@ def use_queue(voice, guild):
         url = build_stream_url(next_track)         
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
         voice.play(source, after=lambda e:use_queue(voice, guild))
+        print("is_playing =", voice.is_playing())
+        print("is_connected =", voice.is_connected())
     else:
         if guild.autoplay == 1:
             randsong = search_random(1)
@@ -48,6 +50,8 @@ async def add_track(voice, respond, guild, track):
         url = build_stream_url(track_id)       
         source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
         voice.play(source, after=lambda e:use_queue(voice, guild))
+        print("is_playing =", voice.is_playing())
+        print("is_connected =", voice.is_connected())
         if guild.now_playing["track_id"]:
             guild.history.append(guild.now_playing.copy())
         guild.now_playing["title"] = track['title']
@@ -75,6 +79,8 @@ async def play_now(voice, guild, track):
     url = build_stream_url(track_id)       
     source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
     voice.play(source, after=lambda e:use_queue(voice, guild))
+    print("is_playing =", voice.is_playing())
+    print("is_connected =", voice.is_connected())
     guild.lyrics = get_lyrics(track_id)
     guild.current_lyric_index = 0
     guild.update_lyrics = True
