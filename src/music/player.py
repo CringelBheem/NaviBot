@@ -25,7 +25,7 @@ def use_queue(voice, guild):
         guild.paused_seconds = 0
         guild.panel_change = True
         url = build_stream_url(next_track)         
-        source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
+        source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
         print("is_playing =", voice.is_playing())
         print("is_connected =", voice.is_connected())
@@ -48,7 +48,7 @@ async def add_track(voice, respond, guild, track):
     track_id = track["id"]
     if not voice.is_playing() and not voice.is_paused():
         url = build_stream_url(track_id)       
-        source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
+        source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
         print("is_playing =", voice.is_playing())
         print("is_connected =", voice.is_connected())
@@ -77,7 +77,7 @@ async def play_now(voice, guild, track):
     track_id = track["track_id"]
     guild.panel_change = True
     url = build_stream_url(track_id)       
-    source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn", volume=1)
+    source = discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
     voice.play(source, after=lambda e:use_queue(voice, guild))
     print("is_playing =", voice.is_playing())
     print("is_connected =", voice.is_connected())
