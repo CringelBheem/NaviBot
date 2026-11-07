@@ -289,5 +289,6 @@ def remove_from_playlist(id, index):
         return []
 
 
-#print(search_navidrome("", "search2"))
+#print(search_navidrome("Honky Cat", "search2"))
+#print(build_stream_url("kLRsIr6lPsnuFhaR41Jfx2"))
 #print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))

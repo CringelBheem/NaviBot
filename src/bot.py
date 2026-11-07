@@ -8,6 +8,9 @@ from discord_control.slash_commands import register
 from discord_control.prefix_commands import handle_prefix
 from discord_control.task_loops import update_panels, update_lyrics
 
+if not discord.opus.is_loaded():
+    discord.opus.load_opus("libopus.so.0")
+
 load_dotenv()
 
 class MyClient(discord.Client):
