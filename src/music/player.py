@@ -25,7 +25,7 @@ def use_queue(voice, guild):
         guild.paused_seconds = 0
         guild.panel_change = True
         url = build_stream_url(next_track)         
-        source = source = discord.FFmpegPCMAudio("/app/FlatVR.mp3") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
+        source = discord.FFmpegOpusAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
     else:
         if guild.autoplay == 1:
@@ -46,7 +46,7 @@ async def add_track(voice, respond, guild, track):
     track_id = track["id"]
     if not voice.is_playing() and not voice.is_paused():
         url = build_stream_url(track_id)       
-        source = discord.FFmpegPCMAudio("/app/FlatVR.mp3") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
+        source = discord.FFmpegOpusAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
         voice.play(source, after=lambda e:use_queue(voice, guild))
         if guild.now_playing["track_id"]:
             guild.history.append(guild.now_playing.copy())
@@ -73,7 +73,7 @@ async def play_now(voice, guild, track):
     track_id = track["track_id"]
     guild.panel_change = True
     url = build_stream_url(track_id)       
-    source = discord.FFmpegPCMAudio("/app/FlatVR.mp3") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
+    source = discord.FFmpegOpusAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn") #discord.FFmpegPCMAudio(url, before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", options="-vn")
     voice.play(source, after=lambda e:use_queue(voice, guild))
     guild.lyrics = get_lyrics(track_id)
     guild.current_lyric_index = 0
