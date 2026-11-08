@@ -155,3 +155,28 @@ def register(tree):
     @app_commands.autocomplete(track=song_autocomplete)
     async def up_command(interaction: discord.Interaction, track: str):
         await move_down(create_context(interaction), track)
+    @tree.command(name="audiotest")
+    async def audiotest(interaction: discord.Interaction):
+        import sys
+        if not interaction.user.voice:
+            await interaction.response.send_message(
+                "Join a voice channel first.",
+                ephemeral=True
+            )
+            return
+
+        vc = await interaction.user.voice.channel.connect()
+
+        source = discord.FFmpegPCMAudio(
+            "/app/FlatVR.mp3",
+            stderr=sys.stderr
+        )
+
+        vc.play(
+            source,
+            after=lambda e: print(f"AFTER={e}")
+        )
+
+        await interaction.response.send_message(
+            f"playing={vc.is_playing()} connected={vc.is_connected()}"
+    )

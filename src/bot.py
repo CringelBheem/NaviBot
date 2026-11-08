@@ -11,6 +11,16 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+
+print("Before opus:", discord.opus.is_loaded())
+
+try:
+    discord.opus.load_opus("libopus.so.0")
+    print("After opus:", discord.opus.is_loaded())
+except Exception as e:
+    print("Opus error:", e)
+
+
 load_dotenv()
 
 class MyClient(discord.Client):
