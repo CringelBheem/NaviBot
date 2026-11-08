@@ -11,9 +11,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-if not discord.opus.is_loaded():
-    discord.opus.load_opus("libopus.so.0")
-
 load_dotenv()
 
 class MyClient(discord.Client):
