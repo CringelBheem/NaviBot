@@ -169,5 +169,4 @@ def register(tree):
         source = discord.FFmpegPCMAudio("/app/FlatVR.mp3", stderr=sys.stderr)
 
         vc.play(source)
-
-        await interaction.response.send_message("Playing test file.")
+        await interaction.response.send_message(f"playing={vc.is_playing()} connected={vc.is_connected()}")
