@@ -165,8 +165,8 @@ def register(tree):
             return
 
         vc = await interaction.user.voice.channel.connect()
-
-        source = discord.FFmpegPCMAudio("/app/FlatVR.mp3")
+        import sys
+        source = discord.FFmpegPCMAudio("/app/FlatVR.mp3", stderr=sys.stderr)
 
         vc.play(source)
 
