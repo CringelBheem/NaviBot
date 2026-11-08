@@ -14,12 +14,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 print("Before opus:", discord.opus.is_loaded())
 
-try:
-    discord.opus.load_opus("libopus.so.0")
-    print("After opus:", discord.opus.is_loaded())
-except Exception as e:
-    print("Opus error:", e)
+logging.warning(f"Before opus: {discord.opus.is_loaded()}")
 
+discord.opus.load_opus("libopus.so.0")
+
+logging.warning(f"After opus: {discord.opus.is_loaded()}")
 
 load_dotenv()
 
