@@ -11,14 +11,7 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-
-print("Before opus:", discord.opus.is_loaded())
-
-logging.warning(f"Before opus: {discord.opus.is_loaded()}")
-
 discord.opus.load_opus("libopus.so.0")
-
-logging.warning(f"After opus: {discord.opus.is_loaded()}")
 
 load_dotenv()
 

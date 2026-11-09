@@ -1,3 +1,5 @@
-discord.py
+discord.py==2.7.1
 requests
 python-dotenv
+PyNaCl
+davey==0.1.7
