@@ -29,7 +29,9 @@ PARAM_COMMANDS = {
     "!search_playlist": search_playlist,
     "!play_playlist": play_playlist,
     "!move_up": move_up,
-    "!move_down": move_down
+    "!move_down": move_down,
+    "!move_top": move_top,
+    "!move_bottom": move_bottom
     #"!playrandom": play_random,
     #"!remove": remove_item
 }
