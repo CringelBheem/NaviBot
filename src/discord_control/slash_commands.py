@@ -61,6 +61,17 @@ async def playlist_song_autocomplete(interaction: discord.Interaction, search: s
     else:
         return []
 
+async def queue_song_autocomplete(interaction: discord.Interaction, search: str):
+    guild = get_guild(interaction.guild.id)
+    queue = guild.queue
+    if not queue:
+        return []
+    else:
+        return [
+            app_commands.Choice(name=f"{song['title']} - {song['artist']}"[:100], value=song['title']) for song in queue[:25]
+        ]
+
+
 def register(tree):
     @tree.command(name="join", description=f"Makes the bot join the current voice channel.")
     async def join_command(interaction: discord.Interaction):
@@ -148,19 +159,19 @@ def register(tree):
     async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
         await remove_track_from_playlist(create_context(interaction), playlist, track)
     @tree.command(name="move_up", description=f"Moves a track up in the queue.")
-    @app_commands.autocomplete(track=song_autocomplete)
+    @app_commands.autocomplete(track=queue_song_autocomplete)
     async def up_command(interaction: discord.Interaction, track: str):
         await move_up(create_context(interaction), track)    
     @tree.command(name="move_down", description=f"Moves a track down in the queue.")
-    @app_commands.autocomplete(track=song_autocomplete)
+    @app_commands.autocomplete(track=queue_song_autocomplete)
     async def down_command(interaction: discord.Interaction, track: str):
         await move_down(create_context(interaction), track)
     @tree.command(name="move_top", description=f"Moves a track to the top of the queue.")
-    @app_commands.autocomplete(track=song_autocomplete)
+    @app_commands.autocomplete(track=queue_song_autocomplete)
     async def top_command(interaction: discord.Interaction, track: str):
         await move_top(create_context(interaction), track)
     @tree.command(name="move_bottom", description=f"Moves a track to the bottom of the queue.")
-    @app_commands.autocomplete(track=song_autocomplete)
+    @app_commands.autocomplete(track=queue_song_autocomplete)
     async def bottom_command(interaction: discord.Interaction, track: str):
         await move_bottom(create_context(interaction), track)
         
