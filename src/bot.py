@@ -40,7 +40,6 @@ client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 
 """
-Move queue items
 Refine search controls
 Progress bar
 """

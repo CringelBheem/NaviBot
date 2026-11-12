@@ -156,7 +156,7 @@ def register(tree):
         await play_playlist(create_context(interaction), playlist)
     @tree.command(name="remove_from_playlist", description=f"Removes a track within a specified playlist.")
     @app_commands.autocomplete(playlist=playlist_autocomplete, track=playlist_song_autocomplete)
-    async def add_to_playlist(interaction: discord.Interaction, playlist: str, track: str):
+    async def remove_from_playlist(interaction: discord.Interaction, playlist: str, track: str):
         await remove_track_from_playlist(create_context(interaction), playlist, track)
     @tree.command(name="move_up", description=f"Moves a track up in the queue.")
     @app_commands.autocomplete(track=queue_song_autocomplete)
