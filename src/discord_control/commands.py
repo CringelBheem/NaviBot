@@ -539,3 +539,21 @@ async def move_bottom(ctx: CommandContext, track):
     else:
         await error_response("Track already at the bottom of the queue.", guild, ctx.respond, ctx.failure)
         return
+
+async def search_song(ctx: CommandContext, query):
+    guild = ctx.guild_state
+
+    results = search_navidrome(query, "search2")
+
+    songs = [s["title"] for s in results.get("song", [])]
+    songs_ids = [s["id"] for s in results.get("song", [])]
+    results =  songs[:30]
+    results_id = songs_ids[:30]
+    artists = []
+    albums = []
+    view = SearchResult(results, results_id)
+    embed = view.build_embed(guild, artists, albums, songs)
+    if not embed:
+        await error_response("No songs found.", guild, ctx.respond, ctx.failure)
+    else:
+        await ctx.send_player_panel(embed=embed, view=view)

@@ -177,7 +177,7 @@ class SearchResult(discord.ui.View):
                 reply += f" - {album}\n"
         if len(songs) > 0:
             reply += "\n**Songs: **\n"
-            for song in songs[:10]:
+            for song in songs[:30]:
                 reply += f" - {song}\n"
         if reply:
             result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Search Results:                                 ** ", description=f"{reply}")
