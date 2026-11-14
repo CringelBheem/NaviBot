@@ -4,7 +4,7 @@ from discord_control.responses import silent_response, error_response, join_chec
 from music.player import add_track, play_now
 from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist, remove_from_playlist
 import random
-from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult
+from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult, AlbumSearchResult
 import time
 
 async def join(ctx: CommandContext):
@@ -557,3 +557,22 @@ async def search_song(ctx: CommandContext, query):
         await error_response("No songs found.", guild, ctx.respond, ctx.failure)
     else:
         await ctx.send_player_panel(embed=embed, view=view)
+
+async def search_album(ctx: CommandContext, query):
+    guild = ctx.guild_state
+
+    results = search_navidrome(query, "search2")
+
+    albums = [a["name"] for a in results.get("album", [])]
+    albums_ids = [a["id"] for a in results.get("album", [])]
+    results =  albums[:30]
+    results_id = albums_ids[:30]
+    artists = []
+    songs = []
+    view = AlbumSearchResult(results, results_id)
+    embed = view.build_embed(guild, artists, albums, songs)
+    if not embed:
+        await error_response("No albums found.", guild, ctx.respond, ctx.failure)
+    else:
+        await ctx.send_player_panel(embed=embed, view=view)
+

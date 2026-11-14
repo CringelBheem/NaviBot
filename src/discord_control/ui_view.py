@@ -185,6 +185,34 @@ class SearchResult(discord.ui.View):
         else:
             return None
 
+class AlbumSearchResult(discord.ui.View):
+    def __init__(self, selections, results_ids):
+        super().__init__(timeout = None)
+        self.selections = selections
+        self.ids = results_ids
+        #self.selected = None
+        self.add_item(SelectAlbumMenu(selections, results_ids, self))
+    
+    def build_embed(self, guild, artists, albums, songs):
+        reply = ""
+        if len(artists) > 0:
+            reply += "\n**Artists: **\n"
+            for artist in artists:
+                reply += f" - {artist}\n"
+        if len(albums) > 0:
+            reply += "\n**Albums: **\n"
+            for album in albums:
+                reply += f" - {album}\n"
+        if len(songs) > 0:
+            reply += "\n**Songs: **\n"
+            for song in songs[:30]:
+                reply += f" - {song}\n"
+        if reply:
+            result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Album Search Results:                                 ** ", description=f"{reply}")
+            return result_embed
+        else:
+            return None
+
 class SelectMenu(discord.ui.Select):
     def __init__(self, selections, results_id, view):
         self.parent_view = view
@@ -206,7 +234,26 @@ class SelectMenu(discord.ui.Select):
         else:
             await play(ctx, search)
 
-
+class SelectAlbumMenu(discord.ui.Select):
+    def __init__(self, selections, results_id, view):
+        self.parent_view = view
+        options = []
+        for i, selection in enumerate(selections):
+            option = discord.SelectOption(label=f"{i}: {selection[:80]}",emoji="🎵",value=f"{i}&{selection}")
+            options.append(option)
+        super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
+    async def callback(self, interaction):
+        #self.parent_view.selected = self.values[0]
+        from discord_control.slash_commands import create_context
+        from discord_control.commands import play_album
+        ctx = create_context(interaction)
+        search = self.values[0].split("&")[1]
+        if not ctx.guild_state.silent:
+            ctx.guild_state.silent = 1
+            await play_album(ctx, search)
+            ctx.guild_state.silent = 0
+        else:
+            await play_album(ctx, search)
 
 class LyricsResult(discord.ui.View):
     def __init__(self):
@@ -222,8 +269,6 @@ class LyricsResult(discord.ui.View):
                     reply += lyric["value"] + "\n"
         result_embed = discord.Embed(colour=0xdc8e10,title="**                                  Lyrics:                                 ** ", description=f"{reply}")
         return result_embed
-
-
 
 class HelpResult(discord.ui.View):
     def __init__(self):
