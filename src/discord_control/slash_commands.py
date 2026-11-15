@@ -174,5 +174,16 @@ def register(tree):
     @app_commands.autocomplete(track=queue_song_autocomplete)
     async def bottom_command(interaction: discord.Interaction, track: str):
         await move_bottom(create_context(interaction), track)
+    @tree.command(name="search_song", description=f"Searches navidrome for songs.")
+    @app_commands.autocomplete(query=song_autocomplete)
+    async def search_song_command(interaction: discord.Interaction, query: str):
+        await search_song(create_context(interaction), query)
+    @tree.command(name="search_album", description=f"Searches navidrome for albums.")
+    @app_commands.autocomplete(query=album_autocomplete)
+    async def search_album_command(interaction: discord.Interaction, query: str):
+        await search_album(create_context(interaction), query)
+    @tree.command(name="search_artist", description=f"Searches navidrome for artists.")
+    async def search_artist_command(interaction: discord.Interaction, query: str):
+        await search_artist(create_context(interaction), query)
         
     
