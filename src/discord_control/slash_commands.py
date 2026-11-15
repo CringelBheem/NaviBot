@@ -181,9 +181,9 @@ def register(tree):
     @tree.command(name="search_album", description=f"Searches navidrome for albums.")
     @app_commands.autocomplete(query=album_autocomplete)
     async def search_album_command(interaction: discord.Interaction, query: str):
-        await search_album(create_context(interaction), query)
+        await search_for_album(create_context(interaction), query)
     @tree.command(name="search_artist", description=f"Searches navidrome for artists.")
     async def search_artist_command(interaction: discord.Interaction, query: str):
-        await search_artist(create_context(interaction), query)
+        await search_for_artist(create_context(interaction), query)
         
     
