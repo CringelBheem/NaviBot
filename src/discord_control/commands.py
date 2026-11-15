@@ -2,9 +2,9 @@ from state import get_guild, CommandContext
 import discord
 from discord_control.responses import silent_response, error_response, join_check
 from music.player import add_track, play_now
-from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist, remove_from_playlist
+from navidrome.api import search_navidrome, search_album, search_random, get_lyrics, create_playlist, add_to_playlist, get_playlist_id, get_playlist, remove_from_playlist, search_artist
 import random
-from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult, AlbumSearchResult
+from discord_control.ui_view import PlayerControls, QueueControls, SearchResult, LyricsResult, HelpResult, AlbumSearchResult, ArtistSearchResult
 import time
 
 async def join(ctx: CommandContext):
@@ -558,7 +558,7 @@ async def search_song(ctx: CommandContext, query):
     else:
         await ctx.send_player_panel(embed=embed, view=view)
 
-async def search_album(ctx: CommandContext, query):
+async def search_for_album(ctx: CommandContext, query):
     guild = ctx.guild_state
 
     results = search_navidrome(query, "search2")
@@ -576,3 +576,39 @@ async def search_album(ctx: CommandContext, query):
     else:
         await ctx.send_player_panel(embed=embed, view=view)
 
+async def search_for_artist(ctx: CommandContext, query):
+    guild = ctx.guild_state
+    results = search_navidrome(query, "search2")
+    artists = [a["name"] for a in results.get("artist", [])]
+    artists_ids = [a["id"] for a in results.get("artist", [])]
+    results =  artists[:30]
+    results_id = artists_ids[:30]
+    albums = []
+    songs = []
+    view = ArtistSearchResult(results, results_id)
+    embed = view.build_embed(guild, artists, albums, songs)
+    if not embed:
+        await error_response("No artists found.", guild, ctx.respond, ctx.failure)
+    else:
+        await ctx.send_player_panel(embed=embed, view=view)
+
+async def play_artist(ctx: CommandContext, query):
+    guild = ctx.guild_state
+
+    if ctx.voice:
+        voice = ctx.voice
+    else:
+        voice = await join_check(ctx)
+
+    if not voice:
+        return
+    
+    songs = search_artist(query)
+
+    if not songs:
+        await error_response("No artists found.", guild, ctx.respond, ctx.failure)
+        return
+    
+    for track in songs:
+        await add_track(voice, ctx.respond, guild, track)
+    await silent_response(ctx.guild_state, ctx.success)

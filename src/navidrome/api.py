@@ -288,6 +288,57 @@ def remove_from_playlist(id, index):
     except KeyError:
         return []
 
+def search_artist(query):
+    url = os.getenv("NAVIDROME_URL")+f"/rest/getArtist"
+
+    token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
+     
+    results = search_navidrome(query, "search2")
+    artists = results.get("artist", [])
+    if not artists:
+        return []
+    artist_id = artists[0]["id"]
+
+    params = {
+            "id": artist_id,
+            "u": "CringelBot",
+            "t": token,
+            "s": salt,
+            "v": "1.16.1",
+            "c": "Cringel Bot",
+            "f": "json",
+        }
+
+    r = requests.get(url, params=params)
+
+    data = r.json()
+    try:
+        albums = data["subsonic-response"]["artist"]["album"]
+    except KeyError:
+        return []
+    
+    url_album = os.getenv("NAVIDROME_URL")+f"/rest/getAlbum"
+    
+    songs = []
+
+    for album in albums:
+        album_id = album["id"]
+        params_album = {
+                        "id": album_id,
+                        "u": "CringelBot",
+                        "t": token,
+                        "s": salt,
+                        "v": "1.16.1",
+                        "c": "Cringel Bot",
+                        "f": "json"}
+        r1 = requests.get(url_album, params=params_album)
+        album_data = r1.json()
+        try:
+            songs.extend(album_data["subsonic-response"]["album"]["song"])
+        except KeyError:
+            pass
+    return songs
+    
 
 #print(search_navidrome("Honky Cat", "search2"))
 #print(build_stream_url("kLRsIr6lPsnuFhaR41Jfx2"))
