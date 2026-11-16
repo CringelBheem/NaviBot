@@ -109,6 +109,10 @@ def register(tree):
     @app_commands.autocomplete(query=album_autocomplete)
     async def play_album_command(interaction: discord.Interaction, query: str):
         await play_album(create_context(interaction), query)
+    @tree.command(name="play_artist", description=f"Queues all songs from an artist.")
+    @app_commands.autocomplete(query=song_autocomplete)
+    async def play_artist_command(interaction: discord.Interaction, query: str):
+        await play_artist(create_context(interaction), query)
     @tree.command(name="silent", description=f"Toggles silent mode.")
     async def silent_command(interaction: discord.Interaction):
         await silent(create_context(interaction))    

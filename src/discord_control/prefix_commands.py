@@ -23,8 +23,12 @@ USER_COMMANDS = {
 PARAM_COMMANDS = {
     "!play": play,
     "!search": search,
+    "!search_song": search_song,
+    "!search_album": search_for_album,
+    "!search_artist": search_for_artist,
     #"!parrot": parrot,
     "!play_album": play_album,
+    "!play_artist": play_artist,
     "!create_playlist": add_playlist,
     "!search_playlist": search_playlist,
     "!play_playlist": play_playlist,
