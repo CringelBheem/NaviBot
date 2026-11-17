@@ -40,6 +40,13 @@ async def album_autocomplete(interaction: discord.Interaction, search: str):
     return [
         app_commands.Choice(name=f"{album['title']} - {album['artist']}"[:100], value=album['title']) for album in albums[:25]
     ]
+
+async def artist_autocomplete(interaction: discord.Interaction, search: str):
+    results = search_navidrome(search, "search2")
+    artists = results.get("artist", [])
+    return [
+        app_commands.Choice(name=f"{artist["name"]}"[:100], value=artist["name"]) for artist in artists[:25]
+    ]
     
 async def playlist_autocomplete(interaction: discord.Interaction, search: str):
     results = get_playlists(search)
@@ -110,7 +117,7 @@ def register(tree):
     async def play_album_command(interaction: discord.Interaction, query: str):
         await play_album(create_context(interaction), query)
     @tree.command(name="play_artist", description=f"Queues all songs from an artist.")
-    @app_commands.autocomplete(query=song_autocomplete)
+    @app_commands.autocomplete(query=artist_autocomplete)
     async def play_artist_command(interaction: discord.Interaction, query: str):
         await play_artist(create_context(interaction), query)
     @tree.command(name="silent", description=f"Toggles silent mode.")
@@ -187,7 +194,7 @@ def register(tree):
     async def search_album_command(interaction: discord.Interaction, query: str):
         await search_for_album(create_context(interaction), query)
     @tree.command(name="search_artist", description=f"Searches navidrome for artists.")
+    @app_commands.autocomplete(query=artist_autocomplete)
     async def search_artist_command(interaction: discord.Interaction, query: str):
         await search_for_artist(create_context(interaction), query)
         
-    
