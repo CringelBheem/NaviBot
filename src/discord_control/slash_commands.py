@@ -45,7 +45,7 @@ async def artist_autocomplete(interaction: discord.Interaction, search: str):
     results = search_navidrome(search, "search2")
     artists = results.get("artist", [])
     return [
-        app_commands.Choice(name=f"{artist["name"]}"[:100], value=artist["name"]) for artist in artists[:25]
+        app_commands.Choice(name=f"{artist['name']}"[:100], value=artist['name']) for artist in artists[:25]
     ]
     
 async def playlist_autocomplete(interaction: discord.Interaction, search: str):
