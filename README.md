@@ -46,13 +46,17 @@ Commands can be used with both / and ! prefixes.
 | `/leave` | Leave the voice channel         |
 
 ### Search Commands:
-| Command               | Description           |
-| --------------------- | --------------------- |
-| `/search <query>`     | Search for tracks     |
-| `/play <query>`       | Play or queue a song  |
-| `/playalbum <query>`  | Queue an entire album |
-| `/playrandom <count>` | Queue random tracks   |
-| `/playrandomalbum`    | Play a random album   |
+| Command                 | Description           |
+| ----------------------- | --------------------- |
+| `/search <query>`       | Search for tracks     |
+| `/search_song <query>`  | Search for songs      |
+| `/search_album <query>` | Search for albums     |
+| `/search_artist <query>`| Search for artists    |
+| `/play <query>`         | Play or queue a song  |
+| `/play_album <query>`   | Queue an entire album |
+| `/play_artist <query>`  | Play or queue a song  |
+| `/play_random <count>`  | Queue random tracks   |
+| `/play_random_album`    | Play a random album   |
 
 ### Playback Commands:
 | Command     | Description                   |
@@ -65,12 +69,16 @@ Commands can be used with both / and ! prefixes.
 | `/previous` | Play the previous track       |
 
 ### Queue Commands:
-| Command              | Description       |
-| -------------------- | ----------------- |
-| `/queue`             | Show the queue    |
-| `/shufflequeue`      | Shuffle the queue |
-| `/clearqueue`        | Clear the queue   |
-| `/remove <position>` | Remove a track    |
+| Command                   | Description               |
+| ------------------------- | ------------------------- |
+| `/queue`                  | Show the queue            |
+| `/shuffle`                | Shuffle the queue         |
+| `/clear_queue`            | Clear the queue           |
+| `/remove <position>`      | Remove a track            |
+| `/move_up <position>`     | Move a track up           |
+| `/move_down <position>`   | Move a track down         |
+| `/move_top <position>`    | Move a track to the top   |
+| `/move_bottom <position>` | Move a track to the bottom|
 
 ### Lyrics Commands:
 | Command   | Description                 |
@@ -84,10 +92,13 @@ Commands can be used with both / and ! prefixes.
 | `/autoplay` | Automatically queue random tracks |
 
 ### Playlist Commands:
-| Command                 | Description      |
-| ----------------------- | ---------------- |
-| `/createplaylist <name>`| Create a playlist|
-
+| Command                           | Description                    |
+| --------------------------------- | ------------------------------ |
+| `/create_playlist <name>`         | Create a playlist              |
+| `/add_to_playlist <track>`        | Adds a track to a playlist     |
+| `/search_playlist <name>`         | Searched tracks in a playlist  |
+| `/play_playlist <name>`           | Plays all tracks in a playlist |
+| `/remove_from_playlist <track>`   | Removes a track from a playlist|
 
 # About this project
 
