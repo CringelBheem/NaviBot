@@ -40,6 +40,5 @@ client.run(os.getenv("DISCORD_BOT_TOKEN"))
 
 
 """
-Refine search controls
 Progress bar
 """

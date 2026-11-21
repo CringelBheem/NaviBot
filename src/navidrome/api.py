@@ -19,11 +19,11 @@ def search_navidrome(query, s_type):
         
     params = {
         "query": query,
-        "u": "CringelBot",
+        "u": "NaviBot",
         "t": token,
         "s": salt,
         "v": "1.16.1",
-        "c": "Cringel Bot",
+        "c": "Navi Bot",
         "f": "json",
     }
     r = requests.get(url, params=params)
@@ -53,11 +53,11 @@ def search_album(query):
 
     params = {
             "id": album_id,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     
@@ -78,11 +78,11 @@ def search_random(size):
 
     params = {
             "size": size if size else 1,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     
@@ -104,11 +104,11 @@ def search_similar(track_id, size):
     params = {
             "id": track_id,
             "count": size if size else 1,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     
@@ -128,17 +128,17 @@ def build_stream_url(track_id):
     return (
         f"{os.getenv('NAVIDROME_URL')}/rest/stream"
         f"?id={track_id}"
-        f"&u=CringelBot"
+        f"&u=NaviBot"
         f"&t={token}"
         f"&s={salt}"
         f"&v=1.16.1"
-        f"&c=CringelBot"
+        f"&c=Navi%20Bot"
     )
 
 def get_image(coverArt):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
 
-    return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=CringelBot&t={token}&s={salt}&v=1.16.1&c=Cringel%20Bot")
+    return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=NaviBot&t={token}&s={salt}&v=1.16.1&c=Navi%20Bot")
 
 def get_lyrics(track_id):
     url = os.getenv("NAVIDROME_URL")+f"/rest/getLyricsBySongId"
@@ -147,11 +147,11 @@ def get_lyrics(track_id):
 
     params = {
             "id": track_id,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     
@@ -171,11 +171,11 @@ def create_playlist(name):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
             "name": name,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -192,11 +192,11 @@ def add_to_playlist(id, song_id):
     params = {
             "playlistId": id,
             "songIdToAdd": song_id,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -211,11 +211,11 @@ def get_playlist_id(name):
 
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -234,11 +234,11 @@ def get_playlist(id):
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
             "id": id,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -253,11 +253,11 @@ def get_playlists(name):
 
     token, salt = generate_token(os.getenv("NAVIDROME_PASSWORD"))
     params = {
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -274,11 +274,11 @@ def remove_from_playlist(id, index):
     params = {
             "playlistId": id,
             "songIndexToRemove": index,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
     r = requests.get(url, params=params)
@@ -301,11 +301,11 @@ def search_artist(query):
 
     params = {
             "id": artist_id,
-            "u": "CringelBot",
+            "u": "NaviBot",
             "t": token,
             "s": salt,
             "v": "1.16.1",
-            "c": "Cringel Bot",
+            "c": "Navi Bot",
             "f": "json",
         }
 
@@ -325,11 +325,11 @@ def search_artist(query):
         album_id = album["id"]
         params_album = {
                         "id": album_id,
-                        "u": "CringelBot",
+                        "u": "NaviBot",
                         "t": token,
                         "s": salt,
                         "v": "1.16.1",
-                        "c": "Cringel Bot",
+                        "c": "Navi Bot",
                         "f": "json"}
         r1 = requests.get(url_album, params=params_album)
         album_data = r1.json()
@@ -340,6 +340,5 @@ def search_artist(query):
     return songs
     
 
-#print(search_navidrome("Honky Cat", "search2"))
 #print(build_stream_url("kLRsIr6lPsnuFhaR41Jfx2"))
 #print(get_lyrics("2sWXMDFPKQGQ45P9eH0hgY"))
