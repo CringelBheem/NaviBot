@@ -162,7 +162,6 @@ class SearchResult(discord.ui.View):
         super().__init__(timeout = None)
         self.selections = selections
         self.ids = results_ids
-        #self.selected = None
         self.add_item(SelectMenu(selections, results_ids, self))
     
     def build_embed(self, guild, artists, albums, songs):
@@ -190,7 +189,6 @@ class AlbumSearchResult(discord.ui.View):
         super().__init__(timeout = None)
         self.selections = selections
         self.ids = results_ids
-        #self.selected = None
         self.add_item(SelectAlbumMenu(selections, results_ids, self))
     
     def build_embed(self, guild, artists, albums, songs):
@@ -218,7 +216,6 @@ class ArtistSearchResult(discord.ui.View):
         super().__init__(timeout = None)
         self.selections = selections
         self.ids = results_ids
-        #self.selected = None
         self.add_item(SelectArtistMenu(selections, results_ids, self))
     
     def build_embed(self, guild, artists, albums, songs):
@@ -250,7 +247,6 @@ class SelectMenu(discord.ui.Select):
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):
-        #self.parent_view.selected = self.values[0]
         from discord_control.slash_commands import create_context
         from discord_control.commands import play
         ctx = create_context(interaction)
@@ -271,7 +267,6 @@ class SelectAlbumMenu(discord.ui.Select):
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):
-        #self.parent_view.selected = self.values[0]
         from discord_control.slash_commands import create_context
         from discord_control.commands import play_album
         ctx = create_context(interaction)
@@ -292,7 +287,6 @@ class SelectArtistMenu(discord.ui.Select):
             options.append(option)
         super().__init__(placeholder="Select an option",max_values=1,min_values=1,options=options)
     async def callback(self, interaction):
-        #self.parent_view.selected = self.values[0]
         from discord_control.slash_commands import create_context
         from discord_control.commands import play_artist
         ctx = create_context(interaction)

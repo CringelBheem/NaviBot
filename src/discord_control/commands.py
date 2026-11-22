@@ -62,19 +62,6 @@ async def search(ctx: CommandContext, query):
     songs_ids = [s["id"] for s in results.get("song", [])]
     results = artists[:10] + albums[:10] + songs[:10]
     results_id = artists_ids[:10] + albums_ids[:10] + songs_ids[:10]
-    """if len(artists) > 0:
-        reply += "\n**Artists: **\n"
-        for artist in artists:
-            reply += f" - {artist}\n"
-    if len(albums) > 0:
-        reply += "\n**Albums: **\n"
-        for album in albums:
-            reply += f" - {album}\n"
-    if len(songs) > 0:
-        reply += "\n**Songs: **\n"
-        for song in songs[:10]:
-            reply += f" - {song}\n"
-    if not reply:"""
     view = SearchResult(results, results_id)
     embed = view.build_embed(guild, artists, albums, songs)
     if not embed:
@@ -159,19 +146,8 @@ async def queue(ctx: CommandContext):
     guild.queue_message = await ctx.send_player_panel(embeds=view.build_embed(guild), view=view)
 
 
-    """
-    if (not guild.now_playing or guild.now_playing["title"] == ""):
-        await ctx.respond("Nothing is currently playing.")
-        return
-    reply = f"**Currently playing: ** {guild.now_playing['title']} by {guild.now_playing['artist']}.\n"
-    for i, track in enumerate(reversed(guild.queue)):
-        reply += f"**{i+1}: ** {track['title']} by {track['artist']}.\n"
-    await ctx.respond(reply)
-    """
-
 async def parrot(ctx: CommandContext, parrot_text):
     await ctx.respond(parrot_text)
-    #await message.delete()
 
 async def play_album(ctx: CommandContext, query):
     guild = ctx.guild_state
@@ -327,13 +303,7 @@ async def previous(ctx: CommandContext):
 async def lyrics(ctx: CommandContext):
     guild = ctx.guild_state
     song = guild.now_playing["track_id"]
-    #get the runtime of song
-    #add all lyrics less than that to an embed
-    #when time of next line is reached, edit embed with new line
     song_lyrics = guild.lyrics
-    """if not song_lyrics:
-        await error_response("No lyrics found.", guild, ctx.respond, ctx.failure)
-        return"""
     if guild.lyric_message:
         guild.lyric_message = None
     guild.lyrics_result = LyricsResult()
@@ -412,7 +382,6 @@ async def play_playlist(ctx: CommandContext, playlist):
     if not voice:
         return
     
-    #songs = [s["title"] for s in results]
 
     if not songs:
         await error_response("No playlists found.", guild, ctx.respond, ctx.failure)
