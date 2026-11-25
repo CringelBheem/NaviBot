@@ -57,9 +57,31 @@ class NavidromeClient:
                 "song": []
             }
 
-    async def search_album():
-        pass
+    async def search_album(self, query):
+        url = self.url+f"/rest/getAlbum"
+        
+        results = await self.search_navidrome(query, "search2")
+        albums = results.get("album", [])
+        if not albums:
+            return []
+        album_id = albums[0]["id"]
 
+
+        params = {
+            **self.auth_params(),
+            "id": album_id
+            }
+        
+
+        async with self.session.get(url, params=params) as r:
+            r.raise_for_status()
+            data = await r.json()
+            
+        try:
+            return data["subsonic-response"]["album"]["song"]
+        except KeyError:
+            return []
+    
     async def search_random():
         pass
 
