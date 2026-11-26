@@ -82,9 +82,23 @@ class NavidromeClient:
         except KeyError:
             return []
     
-    async def search_random():
-        pass
+    async def search_random(self, size):
+        url = self.url+f"/rest/getRandomSongs"
+    
+        params = {
+            **self.auth_params(),
+            "size": size if size else 1
+            }
+        
+        async with self.session.get(url, params=params) as r:
+            r.raise_for_status()
+            data = await r.json()
 
+        try:
+            return data["subsonic-response"]["randomSongs"]["song"]
+        except KeyError:
+            return []
+        
     async def build_stream_url():
         pass
 
