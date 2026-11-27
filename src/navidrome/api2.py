@@ -99,14 +99,41 @@ class NavidromeClient:
         except KeyError:
             return []
         
-    async def build_stream_url():
-        pass
+    def build_stream_url(self, track_id):
+        token, salt = self.generate_token()
+    
+        return (
+            f"{os.getenv('NAVIDROME_URL')}/rest/stream"
+            f"?id={track_id}"
+            f"&u=NaviBot"
+            f"&t={token}"
+            f"&s={salt}"
+            f"&v=1.16.1"
+            f"&c=Navi%20Bot"
+        )
 
-    async def get_image(coverArt):
-        pass
+    def get_image(self, coverArt):
+        token, salt = self.generate_token()
+        
+        return(f"{os.getenv('NAVIDROME_URL')}/rest/getCoverArt?id={coverArt}&u=NaviBot&t={token}&s={salt}&v=1.16.1&c=Navi%20Bot")
 
-    async def get_lyrics(track_id):
-        pass
+    async def get_lyrics(self, track_id):
+        url = self.url+f"/rest/getLyricsBySongId"
+
+        params = {
+            **self.auth_params(),
+            "id": track_id
+            }
+
+
+        async with self.session.get(url, params=params) as r:
+            r.raise_for_status()
+            data = await r.json()
+            
+        try:
+            return data["subsonic-response"]["lyricsList"]["structuredLyrics"][0]["line"]
+        except KeyError:
+            return []
 
     async def create_playlist(name):
         pass
